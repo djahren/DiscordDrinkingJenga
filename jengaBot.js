@@ -246,7 +246,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					bot.sendMessage({to: channelID,message: config.wrongUserWarn});
 				}
 			break;
-			case 'hardreset':
+			case 'reset':
 				if (isAuthorized(userID)) {
 					initializeGame();
 					shuffleStack();
