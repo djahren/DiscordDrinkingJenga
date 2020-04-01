@@ -88,11 +88,10 @@ function removeUserByName(username) {
 
 // TODO: replace bad for functions
 // TODO: update help cmd, add start
-// TODO: break up help into help and admin help
 // TODO: add removeadmin commands
 // TODO: add clearusers command
 // TODO: add command to get list of current in-game admins
-//TODO: (maybe) add on to skip command to skip X people with !skip X (could be useful if someone joins the game at the end of turn order so they can draw immediately)
+// TODO: (maybe) add on to skip command to skip X people with !skip X (could be useful if someone joins the game at the end of turn order so they can draw immediately)
 
 function compareUsers(arr, userID) {
 	for (let i=0; i < arr.length; i++ ) {
@@ -124,6 +123,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         var args = message.substring(1).split(' ');
 		globalChannelId = channelID;
         switch(args[0]) {
+			// commands for all users
 			case 'start':
 				if (gameOver) {
 					gameOver = false;
@@ -193,6 +193,23 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					bot.sendMessage({to: channelID,message:config.notAPlayerWarn });
 				}
 			break;
+			case 'decline':
+				if (userID == prevUser.userID) {
+					currentStack.push(prevTile);
+					shuffleStack();
+					bot.sendMessage({to: channelID,message: "Tile "+prevTile.name+" added back into the game. Take a shot nerd"});
+				} else {
+					bot.sendMessage({to: channelID,message: config.wrongUserWarn});
+				}
+			break;
+			case 'admins':
+			
+			break;
+			case 'help':
+				bot.sendMessage({to: channelID,message: config.helpMsg});
+			break;
+			
+			// admin commands
 			case 'skip':
 				if (isAuthorized(userID)) {
 					if (userList.length > 0) {
@@ -234,18 +251,16 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 			case 'removeadmin':
 			
 			break;
-			case 'adminlist':
-			
-			break;
-			case 'decline':
-				if (userID == prevUser.userID) {
-					currentStack.push(prevTile);
-					shuffleStack();
-					bot.sendMessage({to: channelID,message: "Tile "+prevTile.name+" added back into the game. Take a shot nerd"});
+			case 'clearusers':
+				if (isAuthorized(userID)) {
+					userList = [];
+					usersGone = [];
+					bot.sendMessage({to: channelID,message: config.usersClearMsg});
 				} else {
-					bot.sendMessage({to: channelID,message: config.wrongUserWarn});
+					bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 				}
 			break;
+			
 			case 'reset':
 				if (isAuthorized(userID)) {
 					initializeGame();
@@ -281,9 +296,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 				}
 			break;
-			case 'help':
-				bot.sendMessage({to: channelID,message: config.helpMsg});
-			break;
+			
 			case 'adminhelp':
 				bot.sendMessage({to: channelID,message: config.adminHelpMsg});
 			break;
