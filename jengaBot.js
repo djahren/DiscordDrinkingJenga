@@ -100,6 +100,7 @@ function removeUserByName(username) {
 // TODO: break up help into help and admin help
 // TODO: add removeadmin commands
 // TODO: add clearusers command
+// TODO: add command to get list of current in-game admins
 //TODO: (maybe) add on to skip command to skip X people with !skip X (could be useful if someone joins the game at the end of turn order so they can draw immediately)
 
 function compareUsers(arr, userID) {
@@ -280,6 +281,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 			break;
 			case 'help':
 				bot.sendMessage({to: channelID,message: config.helpMsg});
+			break;
+			case 'adminhelp':
+				bot.sendMessage({to: channelID,message: config.adminHelpMsg});
 			break;
 			default:
 				bot.sendMessage({to: channelID,message: config.unknownCmd});
