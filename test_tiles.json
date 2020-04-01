@@ -1,0 +1,4 @@
+{ 
+	"tile1": {"text": "description of tile1", "count": 2, "WAITSR": false},
+	"tile2": {"text": "description of tile2", "count": 3, "WAITSR": false}
+}

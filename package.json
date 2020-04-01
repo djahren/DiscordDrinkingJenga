@@ -1,0 +1,10 @@
+{
+	"name": "DrinkingJengaBot",
+	"version": "0.0.1",
+	"description": "A bot for playing a drinking jenga/dominoes-style game.",
+	"author": "Waroofwest",
+	"dependencies": {
+		"discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+		"winston": "^3.2.1"
+	}
+}
