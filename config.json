@@ -1,6 +1,6 @@
 {
 	"helpMsg": "I'm the DrinkingJengaBot!\nUse these commands to play:\n•!join - Join the game!\n•!draw - Draw a card when it's your turn\n•!decline - If you don't like your tile, you can skip it (though this invokes a penalty shot)\n•!turn - See whose turn it is\n•!order - See the full order of turns\n•!leave - Leave the game 😢",
-	"adminHelpMsg": "Admin commands:\n•!reset\n•!shuffle\n•!sameroom\n•!apart\n•!boot\n•!skip",
+	"adminHelpMsg": "Admin commands:\n•!hardreset\n•!shuffle\n•!sameroom\n•!apart\n•!boot\n•!skip",
 	"unauthorizedMsg": "Sorry, you don't have permission to use that command. Have Abe or Michael (or a current Admin) give it a go 😉",
 	"gameOverWarn": "Game is over! Reset the game with !reset to play again.",
 	"gameOverMsg": "GG everyone! If you want to play again, use !reset.",
@@ -12,6 +12,7 @@
 	"apartMsg": "We are NOT in the same room.",
 	"notAPlayerWarn": "ERROR 404: Player not found.",
 	"notYourTurnWarn": "Wait a second, it's not your turn. Wait your turn or !join.",
+	"noUsersWarn": "No users have joined the game.",
 	"alreadyJoinedWarn": "Hang on there bucko, you're already in the game 😑",
 	"newRoundMsg": "New round is starting!"
 }

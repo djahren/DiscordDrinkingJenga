@@ -56,31 +56,22 @@ function random() {
 function shuffleStack() { // shuffle current stack with fisher-yates
 	var currentIndex = currentStack.length;
 	var temporaryValue, randomIndex;
-
-	// While there remain elements to shuffle...
-	while (0 !== currentIndex) {
-		// Pick a remaining element
-		randomIndex = Math.floor(random() * currentIndex);
+	while (0 !== currentIndex) {// While there remain elements to shuffle...
+		randomIndex = Math.floor(random() * currentIndex); // Pick a remaining element
 		currentIndex -= 1;
-
-		// And swap it with the current element
-		temporaryValue = currentStack[currentIndex];
+		temporaryValue = currentStack[currentIndex]; // And swap it with the current element
 		currentStack[currentIndex] = currentStack[randomIndex];
 		currentStack[randomIndex] = temporaryValue;
 	}
 }
-initializeGame();
 
 var prevTile;
 var prevUser;
 var WAITSR = false;
 var gameOver = true;
 
-
 var userList = [];
 var usersGone = [];
-
-// currentUser = userList.filter(function(user) {!usersGone.includes(user))}).shift();
 
 
 function removeUserByID(userID) {
@@ -96,7 +87,7 @@ function removeUserByName(username) {
 }
 
 // TODO: replace bad for functions
-// TODO: update help cmd, add start, turnorder -> order
+// TODO: update help cmd, add start
 // TODO: break up help into help and admin help
 // TODO: add removeadmin commands
 // TODO: add clearusers command
@@ -136,6 +127,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 			case 'start':
 				if (gameOver) {
 					gameOver = false;
+					initializeGame();
 					shuffleStack();
 					bot.sendMessage({to:channelID, message: "@"+nextUser().username + " goes first! Get things start with !draw"});
 				} else {
@@ -177,7 +169,11 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				}
 			break;
 			case 'turn':
-				bot.sendMessage({to: channelID,message: "It's "+nextUser().username +"'s turn."});
+				if (userList.length > 0) {
+					bot.sendMessage({to: channelID,message: "It's "+nextUser().username +"'s turn."});
+				} else {
+					bot.sendMessage({to: channelID,message: config.noUsersWarn });
+				}
 			break;
 			case 'order':
 				var str="";
@@ -235,6 +231,12 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 				}
 			break;
+			case 'removeadmin':
+			
+			break;
+			case 'adminlist':
+			
+			break;
 			case 'decline':
 				if (userID == prevUser.userID) {
 					currentStack.push(prevTile);
@@ -244,12 +246,12 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					bot.sendMessage({to: channelID,message: config.wrongUserWarn});
 				}
 			break;
-			case 'reset':
+			case 'hardreset':
 				if (isAuthorized(userID)) {
 					initializeGame();
 					shuffleStack();
 					usersGone = [];
-					gameOver = false;
+					gameOver = true;
 					bot.sendMessage({to: channelID,message: config.resetMsg});
 				} else {
 					bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
