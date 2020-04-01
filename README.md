@@ -1,6 +1,9 @@
 # DiscordDrinkingJenga
 A bot to play drinking jenga in discord
 
+[boilerplate about Discord authtoken]
+
+[N O D E stuffs]
 
 Going from TSV to JSON... ish. M, you need to update this
 ^([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+)$
