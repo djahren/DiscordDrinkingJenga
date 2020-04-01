@@ -96,7 +96,7 @@ function removeUserByName(username) {
 }
 
 // TODO: replace bad for functions
-// TODO: update help cmd, add start, turnorder -> order, add !addmin
+// TODO: update help cmd, add start, turnorder -> order
 // TODO: break up help into help and admin help
 // TODO: add removeadmin commands
 // TODO: add clearusers command
