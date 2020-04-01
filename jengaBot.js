@@ -46,6 +46,13 @@ function initializeGame() {
 		}
 	}
 }
+
+var time = new Date();
+var seed = time.getHours()+ time.getMinutes() * time.getSeconds();
+function random() {
+    var x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+}
 function shuffleStack() { // shuffle current stack with fisher-yates
 	var currentIndex = currentStack.length;
 	var temporaryValue, randomIndex;
@@ -53,7 +60,7 @@ function shuffleStack() { // shuffle current stack with fisher-yates
 	// While there remain elements to shuffle...
 	while (0 !== currentIndex) {
 		// Pick a remaining element
-		randomIndex = Math.floor(Math.random() * currentIndex);
+		randomIndex = Math.floor(random() * currentIndex);
 		currentIndex -= 1;
 
 		// And swap it with the current element
@@ -93,13 +100,6 @@ function removeUserByName(username) {
 // TODO: break up help into help and admin help
 // TODO: add removeadmin commands
 // TODO: add clearusers command
-// TODO: fix RNG, as it currently gives the same game every time
-// some code we could adapt for this purpose:
-// var seed = 1;
-// function random() {
-    // var x = Math.sin(seed++) * 10000;
-    // return x - Math.floor(x);
-// }
 //TODO: (maybe) add on to skip command to skip X people with !skip X (could be useful if someone joins the game at the end of turn order so they can draw immediately)
 
 function compareUsers(arr, userID) {
@@ -135,6 +135,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 			case 'start':
 				if (gameOver) {
 					gameOver = false;
+					shuffleStack();
 					bot.sendMessage({to:channelID, message: "@"+nextUser().username + " goes first! Get things start with !draw"});
 				} else {
 					bot.sendMessage({to:channelID, message: "Silly @"+user + "! The game's already started!"});
@@ -187,8 +188,6 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					}
 				}
 				bot.sendMessage({to: channelID,message: "Here's the turn order: "+str});
-			break;
-			case 'start':
 			break;
 			case 'leave':
 				if (removeUserByID(userID)) {
