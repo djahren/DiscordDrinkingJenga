@@ -89,7 +89,6 @@ function removeUserByName(username) {
 // TODO: replace bad for functions
 // TODO: update help cmd, add start
 // TODO: add removeadmin commands
-// TODO: add clearusers command
 // TODO: add command to get list of current in-game admins
 // TODO: (maybe) add on to skip command to skip X people with !skip X (could be useful if someone joins the game at the end of turn order so they can draw immediately)
 
