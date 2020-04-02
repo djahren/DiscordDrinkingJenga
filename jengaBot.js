@@ -87,9 +87,6 @@ function removeUserByName(username) {
 }
 
 // TODO: replace bad for functions
-// TODO: update help cmd, add start
-// TODO: add removeadmin commands
-// TODO: add command to get list of current in-game admins
 // TODO: (maybe) add on to skip command to skip X people with !skip X (could be useful if someone joins the game at the end of turn order so they can draw immediately)
 
 function compareUsers(arr, userID) {
@@ -128,7 +125,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					gameOver = false;
 					initializeGame();
 					shuffleStack();
-					bot.sendMessage({to:channelID, message: "@"+nextUser().username + " goes first! Get things start with !draw"});
+					bot.sendMessage({to:channelID, message: "@"+nextUser().username + " goes first! Get things started with !draw"});
 				} else {
 					bot.sendMessage({to:channelID, message: "Silly @"+user + "! The game's already started!"});
 				}
@@ -202,7 +199,20 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				}
 			break;
 			case 'admins':
-			
+				var admins = userList.filter(u => isAuthorized(u.userID));
+				if (admins.length > 0) {
+					var str = "";
+					for(var i = 0; i<admins.length; i++) {
+						if (i==0) {
+							str+=admins[i].username;
+						} else {
+							str+=", "+admins[i].username;
+						}
+					}
+					bot.sendMessage({to: channelID,message: "Current in-game admins: "+str });
+				} else {
+					bot.sendMessage({to: channelID,message: config.noAdminsWarn});
+				}
 			break;
 			case 'help':
 				bot.sendMessage({to: channelID,message: config.helpMsg});
@@ -248,7 +258,25 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				}
 			break;
 			case 'removeadmin':
-			
+				if (isAuthorized(userID)) {
+					
+					var userToRemoveList = userList.filter(function(user){ return user.username == args[1]; });
+					if (userToRemoveList.length > 1) {
+						bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
+					} else if (userToRemoveList.length == 1 && isAuthorized(userToRemoveList[0].userID)) {
+						if (userToRemoveList[0].userID == authorizedUsers[0] || userToRemoveList[0].userID == authorizedUsers[1]) {
+							bot.sendMessage({to: channelID,message: "Nice try, but "+userToRemoveList[0].username+" is a permanent admin."});
+						} else  {
+							authorizedUsers = authorizedUsers.filter(function(adminID){ return adminID == userToRemoveList[0].userID; })
+							authorizedUsers.push(userToAddList[0].userID);
+							bot.sendMessage({to: channelID,message: "@" + user + " removed @" + userToAddList[0].username + " from the admin list."});
+						}
+					} else {
+						bot.sendMessage({to: channelID,message: "Whoops, looks like "+ args[1] +" isn't an admin or isn't playing." });
+					}
+				} else {
+					bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
+				}
 			break;
 			case 'clearusers':
 				if (isAuthorized(userID)) {
