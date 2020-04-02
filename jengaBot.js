@@ -79,7 +79,6 @@ function removeUserByID(userID) {
 	userList = userList.filter(function(user){ return user.userID != userID; });
 	return l > userList.length;
 }
-
 function removeUserByName(username) {
 	var l = userList.length;
 	userList = userList.filter(function(user){ return user.username != username; })
