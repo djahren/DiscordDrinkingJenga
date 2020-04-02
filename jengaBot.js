@@ -214,6 +214,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					bot.sendMessage({to: channelID,message: config.noAdminsWarn});
 				}
 			break;
+			case 'tilesleft':
+				bot.sendMessage({to:channelID, message: "There are exactly " + currentStack.length + " tiles left in the game."});
+			break;
 			case 'help':
 				bot.sendMessage({to: channelID,message: config.helpMsg});
 			break;
