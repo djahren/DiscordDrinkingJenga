@@ -87,6 +87,9 @@ function removeUserByName(username) {
 }
 
 // TODO: replace bad for functions
+// TODO: start setting up TheCastle for parties
+// TODO: dedicate ONE text channel to the jenga bot
+// TODO: restrict the bot to only listening to messages in that channel (we should use globalChannelID for this)
 
 function compareUsers(arr, userID) {
 	for (let i=0; i < arr.length; i++ ) {
