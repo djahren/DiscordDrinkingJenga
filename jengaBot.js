@@ -327,6 +327,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 							break;
 							default:
 								bot.sendMessage({to: channelID,message: config.invalidArgWarn});
+						} 
 					} else {
 						if (WAITSR) {
 							bot.sendMessage({to: channelID,message: config.sameRoomMsg});
