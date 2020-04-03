@@ -145,6 +145,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						bot.sendMessage({to: channelID,message: config.gameOverWarn});
 						break;
 					}
+					if (userList.length == 0) {
+						bot.sendMessage({to: channelID,message: config.noUsersWarn });
+						break;
+					}
 					
 					if (userID == nextUser().userID) {
 						
