@@ -43,7 +43,7 @@
 	"Lap/Booty Dance": {"text": "Do a lap dance", "count": 1,"WAITSR": true},
 	"Elevator Dance": {"text": "Dance like no one else is in the elevator", "count": 1,"WAITSR": false},
 	"Karaoke ": {"text": "Sing some bars from the last song your sang along to", "count": 1,"WAITSR": false},
-	"Insults": {"text": "Insult everyone in the room, one at a time, maintainingeyecontact", "count": 1,"WAITSR": false},
+	"Insults": {"text": "Insult everyone in the room, one at a time, maintaining eye contact", "count": 1,"WAITSR": false},
 	"lmgtfy": {"text": "What was the last problem you googled?", "count": 1,"WAITSR": false},
 	"Off With Their Panties!": {"text": "Remove article of underwear", "count": 1,"WAITSR": false},
 	"Be a viking": {"text": "Get a braid", "count": 1,"WAITSR": false},
