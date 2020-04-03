@@ -126,12 +126,12 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 							globalChannelId = channelID;
 							initializeGame();
 							shuffleStack();
-							bot.sendMessage({to:channelID, message: "@"+nextUser().username + " goes first! Get things started with !draw"});
+							bot.sendMessage({to:channelID, message: "<@"+nextUser().userID + "> goes first! Get things started with !draw"});
 						} else {
 							bot.sendMessage({to: channelID,message: config.noUsersWarn });
 						}
 					} else {
-						bot.sendMessage({to:channelID, message: "Silly @"+user + "! The game's already started!"});
+						bot.sendMessage({to:channelID, message: "Silly <@"+userID + ">! The game's already started!"});
 					}
 				break; 
 				case 'draw':
@@ -153,10 +153,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 							gameOver = true;
 							setTimeout(()=>{bot.sendMessage({to: channelID,message: config.gameOverMsg});},1000);
 						} else {
-							setTimeout(()=>{bot.sendMessage({to:channelID, message: "@"+nextUser().username + " goes next!"});},2000);
+							setTimeout(()=>{bot.sendMessage({to:channelID, message: "<@"+nextUser().username + "> goes next!"});},2000);
 						}
 					} else {
-						bot.sendMessage({to: channelID,message: "@"+user+": "+config.notYourTurnWarn});
+						bot.sendMessage({to: channelID,message: "<@"+userID+">: "+config.notYourTurnWarn});
 					}
 				break;
 				case 'join':
@@ -165,17 +165,17 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						userList.push({"username":user,"userID":userID});
 						bot.sendMessage({to: channelID,message: "Welcome to the game, "+user+"!"});
 					} else {
-						bot.sendMessage({to: channelID,message: "@"+user+": "+config.alreadyJoinedWarn});
+						bot.sendMessage({to: channelID,message: user+": "+config.alreadyJoinedWarn});
 					}
 				break;
 				case 'turn':
 					if (userList.length > 0) {
-						bot.sendMessage({to: channelID,message: "It's "+nextUser().username +"'s turn."});
+						bot.sendMessage({to: channelID,message: "It's <@"+nextUser().userID +">'s turn."});
 					} else {
 						bot.sendMessage({to: channelID,message: config.noUsersWarn });
 					}
 				break;
-				case 'order':
+				case 'order': //todo: to map join
 					if (userList.length > 0) {
 						var str="";
 						for (let i=0; i < userList.length; i++ ) {
@@ -206,7 +206,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						bot.sendMessage({to: channelID,message: config.wrongUserWarn});
 					}
 				break;
-				case 'admins':
+				case 'admins': //todo: to map join
 					var admins = userList.filter(u => isAuthorized(u.userID));
 					if (admins.length > 0) {
 						var str = "";
@@ -235,7 +235,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						if (userList.length > 0) {
 							var skippedUser = nextUser();
 							usersGone.push(skippedUser);
-							bot.sendMessage({to:channelID,message: "Skipped "+skippedUser.username+"'s turn.\nNow it's @" + nextUser.username +"'s turn"});
+							bot.sendMessage({to:channelID,message: "Skipped <@"+skippedUser.userID + ">'s turn.\nNow it's <@" + nextUser.userID +">'s turn"});
 						}
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
@@ -260,7 +260,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 							bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
 						} else if (userToAddList.length == 1) {
 							authorizedUsers.push(userToAddList[0].userID);
-							bot.sendMessage({to: channelID,message: "@" + user + " added @" + userToAddList[0].username + " to the admin list."});
+							bot.sendMessage({to: channelID,message: "@" + user + " added <@" + userToAddList[0].userID + "> to the admin list."});
 						} else {
 							bot.sendMessage({to: channelID,message: "Whoops, looks like "+ args[1] +" isn't a player." });
 						}
