@@ -198,18 +198,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						bot.sendMessage({to: channelID,message: config.wrongUserWarn});
 					}
 				break;
-				case 'admins': //todo: to map join
+				case 'admins':
 					var admins = userList.filter(u => isAuthorized(u.userID));
 					if (admins.length > 0) {
-						var str = "";
-						for(var i = 0; i<admins.length; i++) {
-							if (i==0) {
-								str+=admins[i].username;
-							} else {
-								str+=", "+admins[i].username;
-							}
-						}
-						bot.sendMessage({to: channelID,message: "Current in-game admins: "+str });
+						bot.sendMessage({to: channelID,message: "Current in-game admins: "+admins.map(a => a.username).join(', ') });
 					} else {
 						bot.sendMessage({to: channelID,message: config.noAdminsWarn});
 					}
