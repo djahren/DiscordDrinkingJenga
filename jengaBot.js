@@ -56,7 +56,7 @@ function random() {
 function shuffleStack() { // shuffle current stack with fisher-yates
 	var currentIndex = currentStack.length;
 	var temporaryValue, randomIndex;
-	while (0 !== currentIndex) {// While there remain elements to shuffle...
+	while (0 !== currentIndex) {// While there remain elements to shuffle
 		randomIndex = Math.floor(random() * currentIndex); // Pick a remaining element
 		currentIndex -= 1;
 		temporaryValue = currentStack[currentIndex]; // And swap it with the current element
@@ -89,6 +89,8 @@ function removeUserByName(username) {
 // TODO: start setting up TheCastle for parties
 // TODO: dedicate ONE text channel to the jenga bot
 // TODO: restrict the bot to only listening to messages in that channel (we should use globalChannelID for this)
+// TODO: implement !setchannel
+// TODO: implement gameChannel concept
 
 function compareUsers(arr, userID) {
 	for (let i=0; i < arr.length; i++ ) {
