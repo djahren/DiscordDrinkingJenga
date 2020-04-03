@@ -161,9 +161,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						// check if game is over
 						if (currentStack.length == 0 ){
 							gameOver = true;
-							setTimeout(()=>{bot.sendMessage({to: channelID,message: config.gameOverMsg});},1000);
+							setTimeout(()=>{bot.sendMessage({to: channelID,message: config.gameOverMsg});},250);
 						} else {
-							setTimeout(()=>{bot.sendMessage({to:channelID, message: "<@"+nextUser().userID + "> goes next!"});},2000);
+							setTimeout(()=>{bot.sendMessage({to:channelID, message: "<@"+nextUser().userID + "> goes next!"});},500);
 						}
 					} else {
 						bot.sendMessage({to: channelID,message: "<@"+userID+">: "+config.notYourTurnWarn});
