@@ -31,7 +31,7 @@ function isValid(tile) {
 }
 
 function isAuthorized(userID) { return authorizedUsers.includes(userID); }
-var authorizedUsers = ["188814344660844544","295692617616850956"];
+var authorizedUsers = ["188814344660844544","295692617616850956", "537797348214964225"];
 
 var currentStack =[];
 function initializeGame() {
@@ -40,7 +40,7 @@ function initializeGame() {
 	for( let i=0; i<Object.keys(cloneState).length;i++) {
 		var tilename = Object.keys(cloneState)[i];
 		var tile = cloneState[tilename];
-		console.log(tile);
+		//console.log(tile);
 		while(isValid(tile)) { // only adds tiles with proper count and WAITSR state
 			currentStack.push( { "name":tilename, "text":tile.text } );
 			tile.count--;
@@ -77,12 +77,12 @@ var usersGone = [];
 
 function removeUserByID(userID) {
 	var l = userList.length;
-	userList = userList.filter(function(user){ return user.userID != userID; });
+	userList = userList.filter(u => u.userID != userID);
 	return l > userList.length;
 }
 function removeUserByName(username) {
 	var l = userList.length;
-	userList = userList.filter(function(user){ return user.username.toLowerCase() != username.toLowerCase(); })
+	userList = userList.filter(u => u.username.toLowerCase() != username.toLowerCase()); 
 	return l > userList.length;
 }
 
@@ -101,7 +101,7 @@ function nextUser() {
 		console.log(nextUsers," Goes Next");
 		if (nextUsers.length == 0) {
 			usersGone=[];
-			setTimeout(()=>{bot.sendMessage({to: globalChannelId,message: config.newRoundMsg});},1);
+			setTimeout(()=>{bot.sendMessage({to: globalChannelId,message: config.newRoundMsg});},1); // todo: do we need this timeout?
 			return nextUser();
 		}
 		return nextUsers.shift();
@@ -239,7 +239,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				case 'kick':
 					if (isAuthorized(userID)) {
 						console.log(args);
-						if (removeUserByName(args[1])) {
+						if (removeUserByName(args[1])) {// todo: user lookup 
 							bot.sendMessage({to: channelID,message: "Okay "+user+", I've removed "+args[1]+" from the game."});
 						} else {
 							bot.sendMessage({to: channelID,message:config.notAPlayerWarn });
@@ -250,12 +250,12 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				break;
 				case 'addmin':
 					if (isAuthorized(userID)) {
-						var userToAddList = userList.filter(function(user){ return user.username.toLowerCase() == args[1].toLowerCase(); });
+						var userToAddList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
 						if (userToAddList.length > 1) {
 							bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
 						} else if (userToAddList.length == 1) {
 							authorizedUsers.push(userToAddList[0].userID);
-							bot.sendMessage({to: channelID,message: "@" + user + " added <@" + userToAddList[0].userID + "> to the admin list."});
+							bot.sendMessage({to: channelID,message: user + " added <@" + userToAddList[0].userID + "> to the admin list."});
 						} else {
 							bot.sendMessage({to: channelID,message: "Whoops, looks like "+ args[1] +" isn't a player." });
 						}
@@ -266,15 +266,15 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				case 'removeadmin':
 					if (isAuthorized(userID)) {
 						
-						var userToRemoveList = userList.filter(function(user){ return user.username == args[1]; });
+						var userToRemoveList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
 						if (userToRemoveList.length > 1) {
 							bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
 						} else if (userToRemoveList.length == 1 && isAuthorized(userToRemoveList[0].userID)) {
-							if (userToRemoveList[0].userID == authorizedUsers[0] || userToRemoveList[0].userID == authorizedUsers[1]) {
+							// todo: This should be a config line called permadmin
+							if (userToRemoveList[0].userID == authorizedUsers[0] || userToRemoveList[0].userID == authorizedUsers[1] || userToRemoveList[0].userID == authorizedUsers[2]) {
 								bot.sendMessage({to: channelID,message: "Nice try, but "+userToRemoveList[0].username+" is a permanent admin."});
 							} else  {
-								authorizedUsers = authorizedUsers.filter(function(adminID){ return adminID == userToRemoveList[0].userID; })
-								authorizedUsers.push(userToRemoveList[0].userID);
+								authorizedUsers = authorizedUsers.filter(a => a != userToRemoveList[0].userID)
 								bot.sendMessage({to: channelID,message: user + " removed <@" + userToRemoveList[0].userID + "> from the admin list."});
 							}
 						} else {
@@ -293,7 +293,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 					}
 				break;
-				case 'end':
+				case 'end': // todo: add to adminHelpMsg
 					if (isAuthorized(userID)) {
 						usersGone = [];
 						userList = [];
@@ -307,7 +307,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						initializeGame();
 						shuffleStack();
 						usersGone = [];
-						gameOver = true;
+						gameOver = false;
 						bot.sendMessage({to: channelID,message: config.resetMsg});
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
@@ -324,7 +324,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				case 'sameroom':
 					if (isAuthorized(userID)) {
 						if (args[1]) {
-							switch(args[1]) {
+							switch(args[1].toLowerCase()) {
 								case 'true':
 									WAITSR = true;
 									bot.sendMessage({to: channelID,message: config.sameRoomMsg});
