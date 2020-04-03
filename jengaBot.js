@@ -81,7 +81,7 @@ function removeUserByID(userID) {
 }
 function removeUserByName(username) {
 	var l = userList.length;
-	userList = userList.filter(function(user){ return user.username != username; })
+	userList = userList.filter(function(user){ return user.username.toLowerCase() != username.toLowerCase(); })
 	return l > userList.length;
 }
 
@@ -175,17 +175,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						bot.sendMessage({to: channelID,message: config.noUsersWarn });
 					}
 				break;
-				case 'order': //todo: to map join
+				case 'order': 
 					if (userList.length > 0) {
-						var str="";
-						for (let i=0; i < userList.length; i++ ) {
-							if (i==0) {
-								str += userList[i].username;
-							} else {
-								str += ", "+userList[i].username;
-							}
-						}
-						bot.sendMessage({to: channelID,message: "Here's the turn order: "+str});
+						bot.sendMessage({to: channelID,message: "Here's the turn order: "+userList.map(u => u.username).join(', ') });
 					} else {
 						bot.sendMessage({to: channelID,message: config.noUsersWarn });
 					}
@@ -242,6 +234,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					}
 				break;
 				case 'boot':
+				case 'kick':
 					if (isAuthorized(userID)) {
 						console.log(args);
 						if (removeUserByName(args[1])) {
@@ -255,7 +248,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				break;
 				case 'addmin':
 					if (isAuthorized(userID)) {
-						var userToAddList = userList.filter(function(user){ return user.username == args[1]; });
+						var userToAddList = userList.filter(function(user){ return user.username.toLowerCase() == args[1].toLowerCase(); });
 						if (userToAddList.length > 1) {
 							bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
 						} else if (userToAddList.length == 1) {
@@ -279,8 +272,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 								bot.sendMessage({to: channelID,message: "Nice try, but "+userToRemoveList[0].username+" is a permanent admin."});
 							} else  {
 								authorizedUsers = authorizedUsers.filter(function(adminID){ return adminID == userToRemoveList[0].userID; })
-								authorizedUsers.push(userToAddList[0].userID);
-								bot.sendMessage({to: channelID,message: "@" + user + " removed @" + userToAddList[0].username + " from the admin list."});
+								authorizedUsers.push(userToRemoveList[0].userID);
+								bot.sendMessage({to: channelID,message: user + " removed <@" + userToRemoveList[0].userID + "> from the admin list."});
 							}
 						} else {
 							bot.sendMessage({to: channelID,message: "Whoops, looks like "+ args[1] +" isn't an admin or isn't playing." });
