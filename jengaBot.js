@@ -315,21 +315,29 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 			break;
 			case 'sameroom':
 				if (isAuthorized(userID)) {
-					WAITSR = true;
-					bot.sendMessage({to: channelID,message: config.sameRoomMsg});
+					if (args[1]) {
+						switch(args[1]) {
+							case 'true':
+								WAITSR = true;
+								bot.sendMessage({to: channelID,message: config.sameRoomMsg});
+							break;
+							case 'false':
+								WAITSR = false;
+								bot.sendMessage({to: channelID,message: config.apartMsg});
+							break;
+							default:
+								bot.sendMessage({to: channelID,message: config.invalidArgWarn});
+					} else {
+						if (WAITSR) {
+							bot.sendMessage({to: channelID,message: config.sameRoomMsg});
+						} else {
+							bot.sendMessage({to: channelID,message: config.apartMsg});
+						}
+					}
 				} else {
 					bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 				}
 			break;
-			case 'apart':
-				if (isAuthorized(userID)) {
-					WAITSR = false;
-					bot.sendMessage({to: channelID,message: config.apartMsg});
-				} else {
-					bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
-				}
-			break;
-			
 			case 'adminhelp':
 				bot.sendMessage({to: channelID,message: config.adminHelpMsg});
 			break;

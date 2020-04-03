@@ -1,6 +1,6 @@
 {
 	"helpMsg": "I'm the DrinkingJengaBot!\nUse these commands to play:\n• !join - Join the game!\n• !start - Begin the game\n• !draw - Draw a card when it's your turn\n• !decline - If you don't like your tile, you can skip it (though this invokes a penalty shot)\n• !turn - See whose turn it is\n• !order - See the full order of turns\n• !tilesleft - See how many tiles are left in the game\n• !admins - See who is currently an admin\n• !leave - Leave the game 😢",
-	"adminHelpMsg": "Admin commands:\n• !reset - Reset the game to play again\n• !shuffle - Shuffle the tiles!\n• !setchannel - Set the game channel. This only needs to be done once\n• !sameroom - Turn on same-room mode\n• !apart - Turn on apart mode\n• !boot <username> - Boot an inactive player from the game\n• !skip - Skip the current turn\n• !addmin <username> - Add an admin\n• !removeadmin <username> - Remove an admin\n• !clearusers - Clear the user list",
+	"adminHelpMsg": "Admin commands:\n• !reset - Reset the game to play again\n• !shuffle - Shuffle the tiles!\n• !setchannel - Set the game channel. This only needs to be done once\n• !sameroom [true|false] - Set same-room mode\n• !boot <username> - Boot an inactive player from the game\n• !skip - Skip the current turn\n• !addmin <username> - Add an admin\n• !removeadmin <username> - Remove an admin\n• !clearusers - Clear the user list",
 	"unauthorizedMsg": "Sorry, you don't have permission to use that command. Have Abe or Michael (or a current Admin) give it a go 😉",
 	"gameOverWarn": "Game is over! Reset the game with !reset to play again.",
 	"gameOverMsg": "GG everyone! If you want to play again, use !reset.",
@@ -16,5 +16,6 @@
 	"noUsersWarn": "No users have joined the game.",
 	"alreadyJoinedWarn": "Hang on there bucko, you're already in the game 😑",
 	"newRoundMsg": "New round is starting!",
+	"invalidArgWarn": "Invalid argument for that command.",
 	"noAdminsWarn": "Whoop! Looks like there are no admins in the game at the moment. If you need one, ask Abe or Michael to admin someone. They're always admins 😉"
 }
