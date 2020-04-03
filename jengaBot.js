@@ -4,6 +4,7 @@ var auth = require('./auth.json');
 var config = require('./config.json');
 // var tileSet = require('./test_tiles.json');
 var tileSet = require('./tiles.json');
+var emptyUser = { username: "empty", userID: "empty"};
 
 
 var globalChannelId ="";
@@ -95,14 +96,19 @@ function compareUsers(arr, userID) {
 }
 
 function nextUser() {
-	var nextUsers=userList.filter(u => !compareUsers(usersGone, u.userID));
-	console.log(nextUsers," Goes Next");
-	if (nextUsers.length == 0) {
-		usersGone=[];
-		setTimeout(()=>{bot.sendMessage({to: globalChannelId,message: config.newRoundMsg});},1);
-		return nextUser();
+	if (userList.length > 0) {
+		var nextUsers=userList.filter(u => !compareUsers(usersGone, u.userID));
+		console.log(nextUsers," Goes Next");
+		if (nextUsers.length == 0) {
+			usersGone=[];
+			setTimeout(()=>{bot.sendMessage({to: globalChannelId,message: config.newRoundMsg});},1);
+			return nextUser();
+		}
+		return nextUsers.shift();
+	} else {
+		bot.sendMessage({to: channelID,message: config.noUsersWarn });
+		return emptyUser;
 	}
-	return nextUsers.shift();
 }
 
 function isUser(userID) {
@@ -153,7 +159,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 							gameOver = true;
 							setTimeout(()=>{bot.sendMessage({to: channelID,message: config.gameOverMsg});},1000);
 						} else {
-							setTimeout(()=>{bot.sendMessage({to:channelID, message: "<@"+nextUser().username + "> goes next!"});},2000);
+							setTimeout(()=>{bot.sendMessage({to:channelID, message: "<@"+nextUser().userID + "> goes next!"});},2000);
 						}
 					} else {
 						bot.sendMessage({to: channelID,message: "<@"+userID+">: "+config.notYourTurnWarn});
@@ -219,7 +225,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						if (userList.length > 0) {
 							var skippedUser = nextUser();
 							usersGone.push(skippedUser);
-							bot.sendMessage({to:channelID,message: "Skipped <@"+skippedUser.userID + ">'s turn.\nNow it's <@" + nextUser.userID +">'s turn"});
+							bot.sendMessage({to:channelID,message: "Skipped <@"+skippedUser.userID + ">'s turn.\nNow it's <@" + nextUser().userID +">'s turn"});
 						}
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
