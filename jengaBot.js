@@ -230,7 +230,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 							var skippedUser = nextUser();
 							usersGone.push(skippedUser);
 							bot.sendMessage({to:channelID,message: "Skipped <@"+skippedUser.userID + ">'s turn.\nNow it's <@" + nextUser().userID +">'s turn"});
-						}
+						} else {
+						bot.sendMessage({to: channelID,message: config.noUsersWarn });
+					}
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 					}
