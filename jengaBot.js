@@ -274,7 +274,6 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						if (userToRemoveList.length > 1) {
 							bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
 						} else if (userToRemoveList.length == 1 && isAuthorized(userToRemoveList[0].userID)) {
-							// todo: This should be a config line called permadmin
 							if (isPermAdmin(userToRemoveList[0].userID)) {
 								bot.sendMessage({to: channelID,message: "Nice try, but "+userToRemoveList[0].username+" is a permanent admin."});
 							} else  {
