@@ -31,7 +31,9 @@ function isValid(tile) {
 }
 
 function isAuthorized(userID) { return authorizedUsers.includes(userID); }
-var authorizedUsers = ["188814344660844544","295692617616850956", "537797348214964225"];
+function isPermAdmin(userID) { return permAdmins.includes(userID); }
+var permAdmins = config.permAdmins;
+var authorizedUsers = [...permAdmins]; // clone permAdmins list
 
 var currentStack =[];
 function initializeGame() {
@@ -273,7 +275,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 							bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
 						} else if (userToRemoveList.length == 1 && isAuthorized(userToRemoveList[0].userID)) {
 							// todo: This should be a config line called permadmin
-							if (userToRemoveList[0].userID == authorizedUsers[0] || userToRemoveList[0].userID == authorizedUsers[1] || userToRemoveList[0].userID == authorizedUsers[2]) {
+							if (isPermAdmin(userToRemoveList[0].userID)) {
 								bot.sendMessage({to: channelID,message: "Nice try, but "+userToRemoveList[0].username+" is a permanent admin."});
 							} else  {
 								authorizedUsers = authorizedUsers.filter(a => a != userToRemoveList[0].userID)
