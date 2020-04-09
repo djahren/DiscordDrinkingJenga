@@ -94,12 +94,9 @@ function removeUserByName(username) {
 
 // TODO: replace bad for functions
 
-//??Not sure what this does
+//Checks to see if a user is in a list of user objects
 function compareUsers(arr, userID) {
-	for (let i=0; i < arr.length; i++ ) {
-		if (userID == arr[i].userID) return true;
-	}
-	return false;
+	return arr.filter(u => u.userId != userID).length == 1;
 }
 
 //Returns the next user object. Super important, be careful when messing with this
