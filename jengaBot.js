@@ -296,7 +296,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 					}
 				break;
-				case 'end': // todo: add to adminHelpMsg
+				case 'end':
 					if (isAuthorized(userID)) {
 						usersGone = [];
 						userList = [];
