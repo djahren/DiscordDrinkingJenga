@@ -116,10 +116,10 @@ function nextUser() {
 	}
 }
 
-//Used to prevent anyone from double joining
-function isUser(userID) {
-	return compareUsers(userList,userID);
-}
+//Deprecated //Used to prevent anyone from double joining
+// function isUser(userID) {
+	// return compareUsers(userList,userID);
+// }
 
 
 bot.on('message', function (username, userID, channelID, message, evt) {
@@ -176,7 +176,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					}
 				break;
 				case 'join':
-					if(!isUser(userID)) {
+					if(!compareUsers(userList,userID)) {
 						userList.push({"username":username,"userID":userID});
 						bot.sendMessage({to: channelID,message: "Welcome to the game, "+username+"!"});
 					} else {
