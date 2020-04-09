@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 var Discord = require('discord.io');
 var logger = require('winston');
 var auth = require('./auth.json');
@@ -40,17 +41,17 @@ var authorizedUsers = [...permAdmins]; // clone permAdmins list
 
 var currentStack =[];
 function initializeGame() {
-	console.log("we initializing");
+	console.log("Engage!");
 	var cloneState = JSON.parse(JSON.stringify(tileSet));
-	for( let i=0; i<Object.keys(cloneState).length;i++) {
-		var tilename = Object.keys(cloneState)[i];
-		var tile = cloneState[tilename];
+	Object.keys(cloneState).forEach(title =>{
+		var tilename = title;
+		var tile = cloneState[title];
 		//console.log(tile);
 		while(isValid(tile)) { // only adds tiles with proper count and WAITSR state
 			currentStack.push( { "name":tilename, "text":tile.text } );
 			tile.count--;
 		}
-	}
+	});
 }
 
 var time = new Date();
@@ -111,7 +112,7 @@ function nextUser() {
 		console.log(nextUsers[0].username," goes next");
 		return nextUsers.shift();
 	} else {
-		bot.sendMessage({to: channelID,message: config.noUsersWarn });
+		bot.sendMessage({to: globalChannelId,message: config.noUsersWarn });
 		return emptyUser;
 	}
 }
