@@ -19,6 +19,7 @@ var bot = new Discord.Client({
    token: auth.token,
    autorun: true
 });
+//Boot up bot
 bot.on('ready', function (evt) {
     logger.info('Connected');
     logger.info('Logged in as: ');
@@ -30,7 +31,9 @@ function isValid(tile) {
 	return (tile.count > 0) && ( WAITSR || !tile.WAITSR );
 }
 
+//Checks if a user is an Admin
 function isAuthorized(userID) { return authorizedUsers.includes(userID); }
+//Permadmins are unremoveable which prevents bot from getting into an unrecoverable state
 function isPermAdmin(userID) { return permAdmins.includes(userID); }
 var permAdmins = config.permAdmins;
 var authorizedUsers = [...permAdmins]; // clone permAdmins list
@@ -57,6 +60,7 @@ function random() {
     return x - Math.floor(x);
 }
 function shuffleStack() { // shuffle current stack with fisher-yates
+	console.log("Every day I'm shufflin'");
 	var currentIndex = currentStack.length;
 	var temporaryValue, randomIndex;
 	while (0 !== currentIndex) {// While there remain elements to shuffle
@@ -76,7 +80,7 @@ var gameOver = true;
 var userList = [];
 var usersGone = [];
 
-
+//Remove players from player list
 function removeUserByID(userID) {
 	var l = userList.length;
 	userList = userList.filter(u => u.userID != userID);
@@ -90,6 +94,7 @@ function removeUserByName(username) {
 
 // TODO: replace bad for functions
 
+//??Not sure what this does
 function compareUsers(arr, userID) {
 	for (let i=0; i < arr.length; i++ ) {
 		if (userID == arr[i].userID) return true;
@@ -97,15 +102,16 @@ function compareUsers(arr, userID) {
 	return false;
 }
 
+//Returns the next user object. Super important, be careful when messing with this
 function nextUser() {
 	if (userList.length > 0) {
-		var nextUsers=userList.filter(u => !compareUsers(usersGone, u.userID));
-		console.log(nextUsers," Goes Next");
-		if (nextUsers.length == 0) {
+		var nextUsers=userList.filter(u => !compareUsers(usersGone, u.userID)); //take the userList, remove everyone who has gone this round
+		if (nextUsers.length == 0) { //if there are no users who haven't gone this round, reset the round and announce the fact
 			usersGone=[];
 			setTimeout(()=>{bot.sendMessage({to: globalChannelId,message: config.newRoundMsg});},1); // todo: do we need this timeout?
 			return nextUser();
 		}
+		console.log(nextUsers[0].username," goes next");
 		return nextUsers.shift();
 	} else {
 		bot.sendMessage({to: channelID,message: config.noUsersWarn });
@@ -113,6 +119,7 @@ function nextUser() {
 	}
 }
 
+//Used to prevent anyone from double joining
 function isUser(userID) {
 	return compareUsers(userList,userID);
 }
@@ -172,7 +179,6 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					}
 				break;
 				case 'join':
-					//console.log(userList,isUser(userID));
 					if(!isUser(userID)) {
 						userList.push({"username":user,"userID":userID});
 						bot.sendMessage({to: channelID,message: "Welcome to the game, "+user+"!"});
