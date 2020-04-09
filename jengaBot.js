@@ -125,7 +125,7 @@ function isUser(userID) {
 }
 
 
-bot.on('message', function (user, userID, channelID, message, evt) {
+bot.on('message', function (username, userID, channelID, message, evt) {
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!`
 	if (gameOver || channelID == globalChannelId) {
@@ -162,8 +162,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 					if (userID == nextUser().userID) {
 						
 						prevTile = currentStack.pop();
-						prevUser = {"username":user,"userID":userID};
-						bot.sendMessage({to: channelID,message: user + " drew \n"+prevTile.name+": \n\t"+ prevTile.text});
+						prevUser = {"username":username,"userID":userID};
+						bot.sendMessage({to: channelID,message: username + " drew \n"+prevTile.name+": \n\t"+ prevTile.text});
 						console.log(prevTile.name+": "+ prevTile.text); 
 						usersGone.push(prevUser)
 						
@@ -180,10 +180,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				break;
 				case 'join':
 					if(!isUser(userID)) {
-						userList.push({"username":user,"userID":userID});
-						bot.sendMessage({to: channelID,message: "Welcome to the game, "+user+"!"});
+						userList.push({"username":username,"userID":userID});
+						bot.sendMessage({to: channelID,message: "Welcome to the game, "+username+"!"});
 					} else {
-						bot.sendMessage({to: channelID,message: user+": "+config.alreadyJoinedWarn});
+						bot.sendMessage({to: channelID,message: username+": "+config.alreadyJoinedWarn});
 					}
 				break;
 				case 'turn':
@@ -202,7 +202,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				break;
 				case 'leave':
 					if (removeUserByID(userID)) {
-						bot.sendMessage({to: channelID,message: "Okay "+user+", I've removed you from the game."});
+						bot.sendMessage({to: channelID,message: "Okay "+username+", I've removed you from the game."});
 					} else {
 						bot.sendMessage({to: channelID,message:config.notAPlayerWarn });
 					}
@@ -249,8 +249,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 				case 'kick':
 					if (isAuthorized(userID)) {
 						console.log(args);
-						if (removeUserByName(args[1])) {// todo: user lookup 
-							bot.sendMessage({to: channelID,message: "Okay "+user+", I've removed "+args[1]+" from the game."});
+						if (removeUserByName(args[1])) {// todo: username lookup 
+							bot.sendMessage({to: channelID,message: "Okay "+username+", I've removed "+args[1]+" from the game."});
 						} else {
 							bot.sendMessage({to: channelID,message:config.notAPlayerWarn });
 						}
@@ -265,7 +265,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 							bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
 						} else if (userToAddList.length == 1) {
 							authorizedUsers.push(userToAddList[0].userID);
-							bot.sendMessage({to: channelID,message: user + " added <@" + userToAddList[0].userID + "> to the admin list."});
+							bot.sendMessage({to: channelID,message: username + " added <@" + userToAddList[0].userID + "> to the admin list."});
 						} else {
 							bot.sendMessage({to: channelID,message: "Whoops, looks like "+ args[1] +" isn't a player." });
 						}
@@ -284,7 +284,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 								bot.sendMessage({to: channelID,message: "Nice try, but "+userToRemoveList[0].username+" is a permanent admin."});
 							} else  {
 								authorizedUsers = authorizedUsers.filter(a => a != userToRemoveList[0].userID)
-								bot.sendMessage({to: channelID,message: user + " removed <@" + userToRemoveList[0].userID + "> from the admin list."});
+								bot.sendMessage({to: channelID,message: username + " removed <@" + userToRemoveList[0].userID + "> from the admin list."});
 							}
 						} else {
 							bot.sendMessage({to: channelID,message: "Whoops, looks like "+ args[1] +" isn't an admin or isn't playing." });
