@@ -1,4 +1,5 @@
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
+/* jshint node: true */
 var Discord = require('discord.io');
 var logger = require('winston');
 var auth = require('./auth.json');
@@ -11,7 +12,7 @@ var emptyUser = { username: "empty", userID: "empty"};
 var globalChannelId ="";
 // Configure logger settings
 logger.remove(logger.transports.Console);
-logger.add(new logger.transports.Console, {
+logger.add(new logger.transports.Console(), {
     colorize: true
 });
 logger.level = 'debug';
@@ -46,7 +47,6 @@ function initializeGame() {
 	Object.keys(cloneState).forEach(title =>{
 		var tilename = title;
 		var tile = cloneState[title];
-		//console.log(tile);
 		while(isValid(tile)) { // only adds tiles with proper count and WAITSR state
 			currentStack.push( { "name":tilename, "text":tile.text } );
 			tile.count--;
@@ -93,8 +93,6 @@ function removeUserByName(username) {
 	return l > userList.length;
 }
 
-// TODO: replace bad for functions
-
 //Checks to see if a user is in a list of user objects
 function compareUsers(arr, userID) {
 	return arr.filter(u => u.userId != userID).length == 1;
@@ -106,7 +104,7 @@ function nextUser() {
 		var nextUsers=userList.filter(u => !compareUsers(usersGone, u.userID)); //take the userList, remove everyone who has gone this round
 		if (nextUsers.length == 0) { //if there are no users who haven't gone this round, reset the round and announce the fact
 			usersGone=[];
-			setTimeout(()=>{bot.sendMessage({to: globalChannelId,message: config.newRoundMsg});},1); // todo: do we need this timeout?
+			bot.sendMessage({to: globalChannelId,message: config.newRoundMsg});
 			return nextUser();
 		}
 		console.log(nextUsers[0].username," goes next");
@@ -163,7 +161,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 						prevUser = {"username":username,"userID":userID};
 						bot.sendMessage({to: channelID,message: username + " drew \n"+prevTile.name+": \n\t"+ prevTile.text});
 						console.log(prevTile.name+": "+ prevTile.text); 
-						usersGone.push(prevUser)
+						usersGone.push(prevUser);
 						
 						// check if game is over
 						if (currentStack.length == 0 ){
@@ -281,7 +279,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 							if (isPermAdmin(userToRemoveList[0].userID)) {
 								bot.sendMessage({to: channelID,message: "Nice try, but "+userToRemoveList[0].username+" is a permanent admin."});
 							} else  {
-								authorizedUsers = authorizedUsers.filter(a => a != userToRemoveList[0].userID)
+								authorizedUsers = authorizedUsers.filter(a => a != userToRemoveList[0].userID);
 								bot.sendMessage({to: channelID,message: username + " removed <@" + userToRemoveList[0].userID + "> from the admin list."});
 							}
 						} else {
@@ -309,6 +307,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 					}
+				break;
 				case 'reset':
 					if (isAuthorized(userID)) {
 						initializeGame();
