@@ -1,9 +1,9 @@
 # DiscordDrinkingJenga
 A bot to play drinking jenga in discord
 
-[boilerplate about Discord authtoken]
-
-[N O D E stuffs]
+Follow steps 1-6 (use this bot's directory for step 5) of this guide
+https://www.digitaltrends.com/gaming/how-to-make-a-discord-bot/
+in order to set up the bot
 
 Going from TSV to JSON... ish. M, you need to update this
 ^([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+)$
