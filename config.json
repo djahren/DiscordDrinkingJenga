@@ -19,5 +19,6 @@
 	"invalidArgWarn": "Invalid argument for that command.",
 	"gameEndMsg": "Game ended. Use !join and !start to get things back up and running.",
 	"noAdminsWarn": "Whoop! Looks like there are no admins in the game at the moment. If you need one, ask Abe or Michael to admin someone. They're always admins 😉",
+	"alreadyAdminWarn": "User is already an admin.",
 	"permAdmins": ["188814344660844544","295692617616850956", "537797348214964225"]
 }

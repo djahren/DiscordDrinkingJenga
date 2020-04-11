@@ -260,8 +260,12 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 						if (userToAddList.length > 1) {
 							bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
 						} else if (userToAddList.length == 1) {
-							authorizedUsers.push(userToAddList[0].userID);
-							bot.sendMessage({to: channelID,message: username + " added <@" + userToAddList[0].userID + "> to the admin list."});
+							if(!isAuthorized(userToAddList[0].userID)) {
+								authorizedUsers.push(userToAddList[0].userID);
+								bot.sendMessage({to: channelID,message: username + " added <@" + userToAddList[0].userID + "> to the admin list."});
+							} else {
+								bot.sendMessage({to: channelID,message: config.alreadyAdminWarn});
+							}
 						} else {
 							bot.sendMessage({to: channelID,message: "Whoops, looks like "+ args[1] +" isn't a player." });
 						}
