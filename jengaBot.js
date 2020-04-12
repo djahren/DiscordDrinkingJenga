@@ -245,8 +245,9 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				case 'kick':
 					if (isAuthorized(userID)) {
 						console.log(args);
-						if (removeUserByName(args[1])) {// todo: username lookup 
-							bot.sendMessage({to: channelID,message: "Okay "+username+", I've removed "+args[1]+" from the game."});
+						var userToRemove = userList.find(u => u.username.toLowerCase() == args[1].toLowerCase()); //find user's properly capitalized name
+						if (userToRemove && userToRemove.username && removeUserByName(args[1])) { 
+							bot.sendMessage({to: channelID,message: "Okay "+username+", I've removed "+userToRemove.username+" from the game."});
 						} else {
 							bot.sendMessage({to: channelID,message:config.notAPlayerWarn });
 						}
