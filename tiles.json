@@ -70,7 +70,7 @@
 	"Bar-back": {"text": "Get everyone drinks", "count": 1,"WAITSR": true},
 	"Get out of drunk free": {"text": "Hold onto this tile; use it when you don't want to take a drink", "count": 1,"WAITSR": false},
 	"Virgins": {"text": "Virgins Drink", "count": 1,"WAITSR": false},
-	"Skip": {"text": "The next person does not take a tile", "count": 1,"WAITSR": false},
+	"Skip": {"text": "The next person does not take a tile. Have an admin !skip them", "count": 1,"WAITSR": false},
 	"Wild": {"text": "You get to decide which tile you do", "count": 1,"WAITSR": false},
 	"Get Off My Lawn": {"text": "Oldest Person Drinks", "count": 1,"WAITSR": false},
 	"Tide Pods": {"text": "Youngest Person Drinks", "count": 1,"WAITSR": false},
