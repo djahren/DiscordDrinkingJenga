@@ -1,9 +1,18 @@
 # DiscordDrinkingJenga
 A bot to play drinking jenga in discord
 
-Follow steps 1-6 (use this bot's directory for step 5) of this guide
-https://www.digitaltrends.com/gaming/how-to-make-a-discord-bot/
-in order to set up the bot
+Download and extract this repository
+Install node
+Open a command prompt, navigate to the files you extracted
+	npm install discord.io
+	npm install winston
+Go to https://www.digitaltrends.com/gaming/how-to-make-a-discord-bot/ and follow steps 2-4 to get auth token and add bot to 
+Create file auth.json in the bot directory, contents should be 
+	{"token":"[your token]"}
+Edit config.json
+	replace permadmins with your (and your fellow admins) userIds. Google how to do this, they are 18 digit numbers, make sure to keep it in a list of strings
+	replace both instances of "Abe or Michael" with then names of your admin(s)
+Run RunBot.bat as admin
 
 To convert a tile set from TSV to JSON:
 Step 1: Execute this substitution regex:
