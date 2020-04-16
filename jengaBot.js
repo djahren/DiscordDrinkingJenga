@@ -26,6 +26,8 @@ bot.on('ready', function (evt) {
     logger.info('Connected');
     logger.info('Logged in as: ');
     logger.info(bot.username + ' - (' + bot.id + ')');
+	// 695648112890609695 <- hardcoded jenga text channelID
+	bot.sendMessage({to: "695648112890609695",message: config.readyMsg });
 });
 
 // tile is acceptable if count isn't depleted and tile WAITSR constraint satisfied
