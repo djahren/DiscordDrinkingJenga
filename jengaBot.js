@@ -95,7 +95,11 @@ function removeUserByName(username) {
 
 //Checks to see if a user is in a list of user objects
 function compareUsers(arr, userID) {
-	return arr.filter(u => u.userId != userID).length == 1;
+	//return arr.filter(u => u.userId != userID).length == 1;
+	for (let i=0; i < arr.length; i++ ) {
+		if (userID == arr[i].userID) return true;
+	}
+	return false;
 }
 
 //Returns the next user object. Super important, be careful when messing with this
