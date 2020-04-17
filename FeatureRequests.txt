@@ -1,0 +1,10 @@
+Feature Requests:
+	!save/!load: save and load state
+		just tiles? or also users/gone?
+	tilesets: add other optional tilesets
+		figure out a way to load in from github? 
+		WAITSR tileset? or have that still be an option?
+		non-sexy tileset
+		!tileset [list|load [name(s)]|unload [name(s)]]
+	review all tiles and descriptions
+		
