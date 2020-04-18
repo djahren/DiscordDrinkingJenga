@@ -127,8 +127,6 @@ function nextUser() {
 // }
 
 
-//todo: announce when it's alive
-//todo: add !graveyard command and functionality
 bot.on('message', function (username, userID, channelID, message, evt) {
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!`

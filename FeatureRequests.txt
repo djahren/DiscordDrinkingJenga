@@ -7,4 +7,6 @@ Feature Requests:
 		non-sexy tileset
 		!tileset [list|load [name(s)]|unload [name(s)]]
 	review all tiles and descriptions
+	!graveyard
+		keep track of old tiles? or compare currentStack to original tile object?
 		
