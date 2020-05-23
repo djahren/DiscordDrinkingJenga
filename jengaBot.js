@@ -2,6 +2,7 @@
 /* jshint node: true */
 var Discord = require('discord.io');
 var logger = require('winston');
+var fuzz = require('fuzzball');
 var auth = require('./auth.json');
 var config = require('./config.json');
 // var tileSet = require('./test_tiles.json');
@@ -234,6 +235,15 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					} else {
 						bot.sendMessage({to: channelID,message: config.noAdminsWarn});
 					}
+				break;
+				case 'detail':
+					if (args[1]){
+						var tile = getTileByFuzzyName(args[1]);
+						bot.sendMessage({to: channelID,message: "Tile detail for "+tile.name+": "+tile.text});
+					} else {
+						bot.sendMessage({to: channelID,message:config.missingArgWarn+"\n"+config.kickUsageMsg});
+					}
+				
 				break;
 				case 'tilesleft':
 					bot.sendMessage({to:channelID, message: "There are exactly " + currentStack.length + " tiles left in the game."});
