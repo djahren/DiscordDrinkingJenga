@@ -47,6 +47,7 @@ var graveyard =[];
 
 function initializeGame() {
 	console.log("Engage!");
+	graveyard =[];
 	var cloneState = JSON.parse(JSON.stringify(tileSet));
 	Object.keys(cloneState).forEach(title =>{
 		var tilename = title;
@@ -407,9 +408,12 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				break;
 				case 'graveyard':
 					if (isAuthorized(userID)) {
-						var graveyardString = graveyard.join(", ");//"";
-						//graveyard.forEach(t => graveyardString +
-						bot.sendMessage({to: channelID,message: graveyardString});
+						var graveyardString = graveyard.join(", ");
+						if (graveyardString.length > 0){
+							bot.sendMessage({to: channelID,message: graveyardString});
+						} else {
+							bot.sendMessage({to: channelID,message: config.graveyardEmptyWarn});
+						}							
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 					}
