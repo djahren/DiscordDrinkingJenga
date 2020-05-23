@@ -293,6 +293,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 						}
 						
 						var adminTile = currentStack.pop();
+						graveyard.unshift(adminTile.name);
 						bot.sendMessage({to: channelID,message: "Admin "+username+" drew\n**"+adminTile.name+"**: \n\t*"+ adminTile.text +"*"});
 						console.log("Admin draw: "+username+" drew "+adminTile.name+": "+ adminTile.text);
 						
