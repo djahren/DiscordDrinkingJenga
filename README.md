@@ -5,8 +5,7 @@ Download and extract this repository
 Install node (nodejs.org  
 Open a command prompt, navigate to the files you extracted  
 ```
-    npm install discord.io
-    npm install winston
+    npm install
 ```
 Go to https://www.digitaltrends.com/gaming/how-to-make-a-discord-bot/ and follow steps 2-4 to get auth token and add bot to your server  
 Create file auth.json in the bot directory, contents should be   
