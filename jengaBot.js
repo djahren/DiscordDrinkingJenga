@@ -43,6 +43,8 @@ var permAdmins = config.permAdmins;
 var authorizedUsers = [...permAdmins]; // clone permAdmins list
 
 var currentStack =[];
+var graveyard =[];
+
 function initializeGame() {
 	console.log("Engage!");
 	var cloneState = JSON.parse(JSON.stringify(tileSet));
@@ -133,6 +135,10 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 	if (gameOver || channelID == globalChannelId) {
 		if (message.substring(0, 1) == '!') {
 			var args = message.substring(1).split(' ');
+			//I can't believe we are doing this to make args case insensitive
+			var largs = [];
+			args.forEach(a => largs.push(a.toLowerCase()));
+			args = largs;
 			globalChannelId = channelID;
 			switch(args[0]) {
 				// commands for all users
@@ -164,6 +170,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					if (userID == nextUser().userID) {
 						
 						prevTile = currentStack.pop();
+						graveyard.unshift(prevTile); //TODO: maybe replace prevtile with graveyard[0]? would have to catch nullcase. could do function?
 						prevUser = {"username":username,"userID":userID};
 						bot.sendMessage({to: channelID,message: username + " drew \n"+prevTile.name+": \n\t"+ prevTile.text});
 						console.log(prevTile.name+": "+ prevTile.text); 
@@ -396,6 +403,11 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 						}
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
+					}
+				break;
+				case 'graveyard':
+					if (isAuthorized(userID)) {
+						bot.sendMessage({to: channelID,message: "not implemented"});
 					}
 				break;
 				case 'adminhelp':
