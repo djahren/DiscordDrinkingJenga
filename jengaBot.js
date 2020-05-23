@@ -81,6 +81,13 @@ function shuffleStack() { // shuffle current stack with fisher-yates
 	}
 }
 
+function getTileByFuzzyName(query) {
+	console.log("Searching for tile with query: "+query);
+	var results = fuzz.extract(query,tileNames);
+	console.log("Result: "+results[0][0]+" with score "+results[0][1]);
+	return { "name":results[0][0], "text": tileSet[results[0][0]].text };
+}
+
 var prevTile;
 var prevUser;
 var WAITSR = false;
@@ -239,11 +246,15 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					}
 				break;
 				case 'detail':
-					if (args[1]){
-						var tile = getTileByFuzzyName(args[1]);
-						bot.sendMessage({to: channelID,message: "Tile detail for "+tile.name+": "+tile.text});
+					if (tileNames.length > 0) {
+						if (args[1]){
+							var tile = getTileByFuzzyName(args[1]);
+							bot.sendMessage({to: channelID,message: "Description of tile '"+tile.name+"': "+tile.text});
+						} else {
+							bot.sendMessage({to: channelID,message:config.missingArgWarn+"\n"+config.kickUsageMsg});
+						}
 					} else {
-						bot.sendMessage({to: channelID,message:config.missingArgWarn+"\n"+config.kickUsageMsg});
+						bot.sendMessage({to: channelID,message: "No tiles have been added: "+config.gameOverWarn});
 					}
 				
 				break;
