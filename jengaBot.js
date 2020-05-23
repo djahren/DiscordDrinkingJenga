@@ -220,6 +220,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				case 'decline':
 					if (userID == prevUser.userID) {
 						currentStack.push(prevTile);
+						graveyard.shift();
 						shuffleStack();
 						bot.sendMessage({to: channelID,message: "Tile "+prevTile.name+" added back into the game. Take a shot nerd"});
 					} else {
