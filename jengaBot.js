@@ -45,6 +45,7 @@ var authorizedUsers = [...permAdmins]; // clone permAdmins list
 
 var currentStack =[];
 var graveyard =[];
+var tileNames =[];
 
 function initializeGame() {
 	console.log("Engage!");
@@ -52,6 +53,7 @@ function initializeGame() {
 	var cloneState = JSON.parse(JSON.stringify(tileSet));
 	Object.keys(cloneState).forEach(title =>{
 		var tilename = title;
+		tileNames.push(tilename);
 		var tile = cloneState[title];
 		while(isValid(tile)) { // only adds tiles with proper count and WAITSR state
 			currentStack.push( { "name":tilename, "text":tile.text } );
