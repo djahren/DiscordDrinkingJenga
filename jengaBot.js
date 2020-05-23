@@ -134,11 +134,8 @@ bot.on('message', function (username, userID, channelID, message, evt) {
     // It will listen for messages that will start with `!`
 	if (gameOver || channelID == globalChannelId) {
 		if (message.substring(0, 1) == '!') {
+			message = message.toLowerCase();
 			var args = message.substring(1).split(' ');
-			//I can't believe we are doing this to make args case insensitive
-			var largs = [];
-			args.forEach(a => largs.push(a.toLowerCase()));
-			args = largs;
 			globalChannelId = channelID;
 			switch(args[0]) {
 				// commands for all users
@@ -407,7 +404,8 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				break;
 				case 'graveyard':
 					if (isAuthorized(userID)) {
-						bot.sendMessage({to: channelID,message: "not implemented"});
+						var graveyardString = "";
+						graveyard.forEach(t => graveyardString
 					}
 				break;
 				case 'adminhelp':
