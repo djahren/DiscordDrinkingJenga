@@ -21,5 +21,9 @@
 	"readyMsg": "I'm alive and ready to play! Use !help to see commands",
 	"noAdminsWarn": "Whoop! Looks like there are no admins in the game at the moment. If you need one, ask Abe or Michael to admin someone. They're always admins 😉",
 	"unauthorizedMsg": "Sorry, you don't have permission to use that command. Have Abe or Michael (or a current Admin) give it a go 😉",
-	"permAdmins": ["188814344660844544","295692617616850956", "537797348214964225"]
+	"permAdmins": ["188814344660844544","295692617616850956", "537797348214964225"],
+	"missingArgWarn": "Invalid command. This command requires an argument.",
+	"kickUsageMsg": "To use !kick, just use the player's discord username: !kick username",
+	"addminUsageMsg": "To use !addmin, use the player's discord username: !addmin username",
+	"removeadminUsageMsg": "To use !removeadminUsageMsg", use the player's discord username: !removeadmin username"
 }

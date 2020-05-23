@@ -250,12 +250,16 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				case 'boot':
 				case 'kick':
 					if (isAuthorized(userID)) {
-						console.log(args);
-						var userToRemove = userList.find(u => u.username.toLowerCase() == args[1].toLowerCase()); //find user's properly capitalized name
-						if (userToRemove && userToRemove.username && removeUserByName(args[1])) { 
-							bot.sendMessage({to: channelID,message: "Okay "+username+", I've removed "+userToRemove.username+" from the game."});
+						if (args[1]) {
+							console.log(args);
+							var userToRemove = userList.find(u => u.username.toLowerCase() == args[1].toLowerCase()); //find user's properly capitalized name
+							if (userToRemove && userToRemove.username && removeUserByName(args[1])) { 
+								bot.sendMessage({to: channelID,message: "Okay "+username+", I've removed "+userToRemove.username+" from the game."});
+							} else {
+								bot.sendMessage({to: channelID,message:config.notAPlayerWarn });
+							}
 						} else {
-							bot.sendMessage({to: channelID,message:config.notAPlayerWarn });
+							bot.sendMessage({to: channelID,message:config.missingArgWarn+"\n"+config.kickUsageMsg});
 						}
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
@@ -263,18 +267,22 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				break;
 				case 'addmin':
 					if (isAuthorized(userID)) {
-						var userToAddList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
-						if (userToAddList.length > 1) {
-							bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
-						} else if (userToAddList.length == 1) {
-							if(!isAuthorized(userToAddList[0].userID)) {
-								authorizedUsers.push(userToAddList[0].userID);
-								bot.sendMessage({to: channelID,message: username + " added <@" + userToAddList[0].userID + "> to the admin list."});
+						if (args[1]) {
+							var userToAddList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
+							if (userToAddList.length > 1) {
+								bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
+							} else if (userToAddList.length == 1) {
+								if(!isAuthorized(userToAddList[0].userID)) {
+									authorizedUsers.push(userToAddList[0].userID);
+									bot.sendMessage({to: channelID,message: username + " added <@" + userToAddList[0].userID + "> to the admin list."});
+								} else {
+									bot.sendMessage({to: channelID,message: config.alreadyAdminWarn});
+								}
 							} else {
-								bot.sendMessage({to: channelID,message: config.alreadyAdminWarn});
+								bot.sendMessage({to: channelID,message: "Whoops, looks like "+ args[1] +" isn't a player." });
 							}
 						} else {
-							bot.sendMessage({to: channelID,message: "Whoops, looks like "+ args[1] +" isn't a player." });
+							bot.sendMessage({to: channelID,message:config.missingArgWarn+"\n"+config.addminUsageMsg});
 						}
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
@@ -282,19 +290,22 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				break;
 				case 'removeadmin':
 					if (isAuthorized(userID)) {
-						
-						var userToRemoveList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
-						if (userToRemoveList.length > 1) {
-							bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
-						} else if (userToRemoveList.length == 1 && isAuthorized(userToRemoveList[0].userID)) {
-							if (isPermAdmin(userToRemoveList[0].userID)) {
-								bot.sendMessage({to: channelID,message: "Nice try, but "+userToRemoveList[0].username+" is a permanent admin."});
-							} else  {
-								authorizedUsers = authorizedUsers.filter(a => a != userToRemoveList[0].userID);
-								bot.sendMessage({to: channelID,message: username + " removed <@" + userToRemoveList[0].userID + "> from the admin list."});
+						if (args[1]) {
+							var userToRemoveList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
+							if (userToRemoveList.length > 1) {
+								bot.sendMessage({to: channelID,message: "WUT? Userlist is in bad state"});
+							} else if (userToRemoveList.length == 1 && isAuthorized(userToRemoveList[0].userID)) {
+								if (isPermAdmin(userToRemoveList[0].userID)) {
+									bot.sendMessage({to: channelID,message: "Nice try, but "+userToRemoveList[0].username+" is a permanent admin."});
+								} else  {
+									authorizedUsers = authorizedUsers.filter(a => a != userToRemoveList[0].userID);
+									bot.sendMessage({to: channelID,message: username + " removed <@" + userToRemoveList[0].userID + "> from the admin list."});
+								}
+							} else {
+								bot.sendMessage({to: channelID,message: "Whoops, looks like "+ args[1] +" isn't an admin or isn't playing." });
 							}
 						} else {
-							bot.sendMessage({to: channelID,message: "Whoops, looks like "+ args[1] +" isn't an admin or isn't playing." });
+							bot.sendMessage({to: channelID,message:config.missingArgWarn+"\n"+config.removeadminUsageMsg});
 						}
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
