@@ -25,5 +25,5 @@
 	"missingArgWarn": "Invalid command. This command requires an argument.",
 	"kickUsageMsg": "To use !kick, just use the player's discord username: !kick username",
 	"addminUsageMsg": "To use !addmin, use the player's discord username: !addmin username",
-	"removeadminUsageMsg": "To use !removeadminUsageMsg", use the player's discord username: !removeadmin username"
+	"removeadminUsageMsg": "To use !removeadminUsageMsg, use the player's discord username: !removeadmin username"
 }

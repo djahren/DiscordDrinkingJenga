@@ -260,7 +260,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 						
 						var adminTile = currentStack.pop();
 						bot.sendMessage({to: channelID,message: "Admin "+username+" drew \n"+adminTile.name+": \n\t"+ adminTile.text});
-						console.log("Admin draw: "username+" drew "+adminTile.name+": "+ adminTile.text);
+						console.log("Admin draw: "+username+" drew "+adminTile.name+": "+ adminTile.text);
 						
 						if (currentStack.length == 0 ){
 							gameOver = true;
