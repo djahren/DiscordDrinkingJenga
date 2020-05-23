@@ -1,8 +1,8 @@
 Feature Requests:
 	tile lookup
-	fuzzy text match
 		
-
+Known Issues:
+	!admindraw doesn't respect !decline
 
 2.0
 	!save/!load: save and load state
