@@ -139,7 +139,6 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 			if (args.length > 1) {
 				args[1] = args.slice(1).join(' ');
 			}
-			var args[1] = args.slice(1).join
 			globalChannelId = channelID;
 			switch(args[0]) {
 				// commands for all users
