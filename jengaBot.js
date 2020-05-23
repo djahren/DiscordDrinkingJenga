@@ -85,7 +85,7 @@ function getTileByFuzzyName(query) {
 	console.log("Searching for tile with query: "+query);
 	var results = fuzz.extract(query,tileNames);
 	console.log("Result: "+results[0][0]+" with score "+results[0][1]);
-	return { "name":results[0][0], "text": tileSet[results[0][0]].text };
+return [{ "name":results[0][0], "text": tileSet[results[0][0]].text },[results[1][0],results[2][0]]];
 }
 
 var prevTile;
@@ -183,7 +183,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 						prevTile = currentStack.pop();
 						graveyard.unshift(prevTile.name); //TODO: maybe replace prevtile with graveyard[0]? would have to catch nullcase. could do function?
 						prevUser = {"username":username,"userID":userID};
-						bot.sendMessage({to: channelID,message: username + " drew \n"+prevTile.name+": \n\t"+ prevTile.text});
+						bot.sendMessage({to: channelID,message: username + " drew\n**"+prevTile.name+"**:\n\t*"+ prevTile.text+"*"});
 						console.log(prevTile.name+": "+ prevTile.text); 
 						usersGone.push(prevUser);
 						
@@ -248,8 +248,10 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				case 'detail':
 					if (tileNames.length > 0) {
 						if (args[1]){
-							var tile = getTileByFuzzyName(args[1]);
-							bot.sendMessage({to: channelID,message: "Description of tile '"+tile.name+"': "+tile.text});
+							var results = getTileByFuzzyName(args[1]);
+							var tile = results[0];
+							var didyoumean = results[1];
+							bot.sendMessage({to: channelID,message: "Description of tile **"+tile.name+"**:\n"+tile.text+"\n\n"+"*Other close matches: **"+didyoumean[0]+"** and **"+didyoumean[1]+"** *"});
 						} else {
 							bot.sendMessage({to: channelID,message:config.missingArgWarn+"\n"+config.kickUsageMsg});
 						}
@@ -291,7 +293,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 						}
 						
 						var adminTile = currentStack.pop();
-						bot.sendMessage({to: channelID,message: "Admin "+username+" drew \n"+adminTile.name+": \n\t"+ adminTile.text});
+						bot.sendMessage({to: channelID,message: "Admin "+username+" drew\n**"+adminTile.name+"**: \n\t*"+ adminTile.text +"*"});
 						console.log("Admin draw: "+username+" drew "+adminTile.name+": "+ adminTile.text);
 						
 						if (currentStack.length == 0 ){
