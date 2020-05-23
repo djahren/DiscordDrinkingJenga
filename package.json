@@ -5,6 +5,7 @@
 	"author": "Waroofwest",
 	"dependencies": {
 		"discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+		"fuzzball": "^1.3.0",
 		"winston": "^3.2.1"
 	}
 }
