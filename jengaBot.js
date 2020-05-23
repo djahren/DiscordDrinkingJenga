@@ -247,6 +247,29 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 					}
 				break;
+				case 'admindraw':
+					if (isAuthorized(userID)) {
+						if (gameOver) {
+							bot.sendMessage({to: channelID,message: config.gameOverWarn});
+							break;
+						}
+						if (userList.length == 0) {
+							bot.sendMessage({to: channelID,message: config.noUsersWarn });
+							break;
+						}
+						
+						var adminTile = currentStack.pop();
+						bot.sendMessage({to: channelID,message: "Admin "+username+" drew \n"+adminTile.name+": \n\t"+ adminTile.text});
+						console.log("Admin draw: "username+" drew "+adminTile.name+": "+ adminTile.text);
+						
+						if (currentStack.length == 0 ){
+							gameOver = true;
+							setTimeout(()=>{bot.sendMessage({to: channelID,message: config.gameOverMsg});},250);
+						}
+					} else {
+						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
+					}
+				break;
 				case 'boot':
 				case 'kick':
 					if (isAuthorized(userID)) {
