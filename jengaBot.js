@@ -167,7 +167,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					if (userID == nextUser().userID) {
 						
 						prevTile = currentStack.pop();
-						graveyard.unshift(prevTile); //TODO: maybe replace prevtile with graveyard[0]? would have to catch nullcase. could do function?
+						graveyard.unshift(prevTile.name); //TODO: maybe replace prevtile with graveyard[0]? would have to catch nullcase. could do function?
 						prevUser = {"username":username,"userID":userID};
 						bot.sendMessage({to: channelID,message: username + " drew \n"+prevTile.name+": \n\t"+ prevTile.text});
 						console.log(prevTile.name+": "+ prevTile.text); 
@@ -404,8 +404,11 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				break;
 				case 'graveyard':
 					if (isAuthorized(userID)) {
-						var graveyardString = "";
-						graveyard.forEach(t => graveyardString
+						var graveyardString = graveyard.join(", ");//"";
+						//graveyard.forEach(t => graveyardString +
+						bot.sendMessage({to: channelID,message: graveyardString});
+					} else {
+						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 					}
 				break;
 				case 'adminhelp':

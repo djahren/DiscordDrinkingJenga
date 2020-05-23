@@ -1,12 +1,16 @@
 Feature Requests:
+	tile lookup
+	fuzzy text match
+		
+
+
+2.0
 	!save/!load: save and load state
 		just tiles? or also users/gone?
-	tilesets: add other optional tilesets
+	custom tile sets
+		tilesets: add other optional tilesets
 		figure out a way to load in from github? 
 		WAITSR tileset? or have that still be an option?
 		non-sexy tileset
 		!tileset [list|load [name(s)]|unload [name(s)]]
-	review all tiles and descriptions
-	!graveyard
-		keep track of old tiles? or compare currentStack to original tile object?
-		
+	Post Draw Functions
