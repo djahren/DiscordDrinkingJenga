@@ -2,7 +2,7 @@
 	"name": "DrinkingJengaBot",
 	"version": "1.0.0",
 	"description": "A bot for playing a drinking jenga/dominoes-style game.",
-	"author": "Waroofwest",
+	"author": "Warofwest, OddOod",
 	"dependencies": {
 		"discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
 		"fuzzball": "^1.3.0",
