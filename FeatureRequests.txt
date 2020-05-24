@@ -1,5 +1,9 @@
 Feature Requests:
-	tile lookup
+	!tileset displays all tile names
+	clarify "May the Odds Be Ever In Your Favor" line 94
+		someone rolls (d6?), drawer drinks #?
+		roll off? winner drinks loser's #?
+	
 		
 Known Issues:
 	!admindraw doesn't respect !decline

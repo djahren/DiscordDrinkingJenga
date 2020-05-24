@@ -1,6 +1,6 @@
 {
 	"name": "DrinkingJengaBot",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A bot for playing a drinking jenga/dominoes-style game.",
 	"author": "Warofwest, OddOod",
 	"dependencies": {
