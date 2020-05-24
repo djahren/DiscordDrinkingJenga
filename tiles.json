@@ -85,7 +85,7 @@
 	"Tribal Council": {"text": "Everyone votes, person with most votes finishes their drinks", "count": 1,"WAITSR": false},
 	"Sibling Rivalry": {"text": "Drink for every sibling you have", "count": 1,"WAITSR": false},
 	"Pangaea": {"text": "Everyone drinks for every continent you've touched", "count": 1,"WAITSR": false},
-	"A Quiet Place": {"text": "Player is mute for 1 round", "count": 1,"WAITSR": false},
+	"A Quiet Place": {"text": "Player is mute for 1 round or 10 turns, whichever is shorter", "count": 1,"WAITSR": false},
 	"Bird Box": {"text": "Player is blind for 1 round or 10 turns, whichever is shorter", "count": 1,"WAITSR": false},
 	"Neighbors Drink": {"text": "Neighbors of the player drink", "count": 1,"WAITSR": false},
 	"Hall Pass": {"text": "Hold onto this tile; use it when you get a tile you don't want to do", "count": 1,"WAITSR": false},
