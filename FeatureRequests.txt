@@ -18,11 +18,6 @@ Known Issues:
 2.0	
 	Post Draw Functions
 	
-add to help
-	save
-	load
-	gamename
-	detail 
 	
 	
 	
