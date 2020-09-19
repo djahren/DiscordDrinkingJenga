@@ -17,6 +17,7 @@ Edit config.json
 • replace both instances of "Abe or Michael" with then names of your admin(s)  
 Run RunBot.bat as admin
 
+If you have any feedback (tiles, features, or bugs), let us know here: https://forms.gle/eNpbEvrDqzNcgMWc9
 
 
 To convert a tile set from TSV to JSON:  
