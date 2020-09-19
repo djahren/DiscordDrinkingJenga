@@ -8,18 +8,25 @@ Feature Requests:
 Known Issues:
 	!admindraw doesn't respect !decline
 
-2.0
-	!save/!load: save and load state
-		just tiles? or also users/gone?
+1.5
 	custom tile sets
 		tilesets: add other optional tilesets
 		figure out a way to load in from github? 
 		WAITSR tileset? or have that still be an option?
 		non-sexy tileset
 		!tileset [list|load [name(s)]|unload [name(s)]]
+2.0	
 	Post Draw Functions
 	
 add to help
 	save
 	load
 	gamename
+	detail 
+	
+	
+	
+Features Added:
+	!detail
+	!save/!load
+	!graveyard

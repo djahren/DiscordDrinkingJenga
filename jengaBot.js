@@ -195,12 +195,12 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					if (gameOver) {
 						if (userList.length > 0) {
 							gameOver = false;
-							gameName = rw({exactly: 2, join: '' });
+							gameName = rw({exactly:2, join: '', formatter: (word, index)=> {return index === 0 ? word.slice(0,1).toUpperCase().concat(word.slice(1)) : word;}});
 							console.log("Game Name: " + gameName);
 							globalChannelId = channelID;
 							initializeGame();
 							shuffleStack();
-							bot.sendMessage({to:channelID, message: "<@"+nextUser().userID + "> goes first! Get things started with !draw"});
+							bot.sendMessage({to:channelID, message: "Welcome! Your game name is " + gameName + "\n<@"+nextUser().userID + "> goes first! Get things started with !draw"});
 						} else {
 							bot.sendMessage({to: channelID,message: config.noUsersWarn });
 						}
@@ -306,7 +306,9 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				case 'help':
 					bot.sendMessage({to: channelID,message: config.helpMsg});
 				break;
-				
+				case 'gamename':
+					bot.sendMessage({to: channelID,message: "Current game name is: "+gameName});
+				break;
 				// admin commands
 				case 'skip':
 					if (isAuthorized(userID)) {
