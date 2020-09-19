@@ -96,8 +96,8 @@ function getTileByFuzzyName(query) {
 	console.log("Searching for tile with query: "+query);
 	var results = fuzz.extract(query,tileNames);
 	console.log("Best result: "+results[0][0]+" with score "+results[0][1]);
-	console.log("Other matches: "+results[1][0]+ " ("+results[1][1]+") & "+results[2][0]+" ("+results[2][1]+")";
-return [{ "name":results[0][0], "text": tileSet[results[0][0]].text },[results[1][0],results[2][0]]];
+	console.log("Other matches: "+results[1][0]+ " ("+results[1][1]+") & "+results[2][0]+" ("+results[2][1]+")");
+	return [{ "name":results[0][0], "text": tileSet[results[0][0]].text },[results[1][0],results[2][0]]];
 }
 
 
