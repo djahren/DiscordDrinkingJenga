@@ -56,7 +56,7 @@ var gameOver = true;
 var userList = [];
 var usersGone = [];
 
-var gamename = "Implement Random Words";
+var gameName = "IRW";
 
 function initializeGame() {
 	console.log("Engage!");
@@ -96,7 +96,7 @@ function getTileByFuzzyName(query) {
 	console.log("Searching for tile with query: "+query);
 	var results = fuzz.extract(query,tileNames);
 	console.log("Best result: "+results[0][0]+" with score "+results[0][1]);
-	console.log("Other matches: "+results[1][0]+ " ("+results[1][1]+") & "+results[2][0]+" ("+results[2][1]+")";
+	console.log("Other matches: "+results[1][0]+ " ("+results[1][1]+") & "+results[2][0]+" ("+results[2][1]+")");
 return [{ "name":results[0][0], "text": tileSet[results[0][0]].text },[results[1][0],results[2][0]]];
 }
 
@@ -141,9 +141,9 @@ function nextUser() {
 }
 
 //
-function save(gameName) {
+function save() {
 	//rotateLogs(gameName);
-	var save_fn = "./saves/"+gamename+"_0.json";
+	var save_fn = "./saves/"+gameName+"_0.json";
 	var saveObj = { "userList": userList, "graveyard": graveyard, "authorizedUsers": authorizedUsers,
 		"usersGone": usersGone, "prevTile": prevTile, "prevUser": prevUser, "currentStack": currentStack,
 	"WAITSR": WAITSR, "gameOver": gameOver, "tileNames": tileNames};
@@ -152,7 +152,7 @@ function save(gameName) {
 }
 
 function load(gameName) {
-	var fn = "./saves/"+gamename+"_0.json";
+	var fn = "./saves/"+gameName+"_0.json";
 	// load save file
 	var saveObj = JSON.parse(fs.readFileSync(fn));
 	// read from save to game variables
@@ -188,10 +188,15 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 			globalChannelId = channelID;
 			switch(args[0]) {
 				// commands for all users
+				case 'rw':
+					bot.sendMessage({to:channelID, message: rw()});
+				break;
 				case 'start':
 					if (gameOver) {
 						if (userList.length > 0) {
 							gameOver = false;
+							gameName = rw({exactly: 2, join: '' });
+							console.log(gameName);
 							globalChannelId = channelID;
 							initializeGame();
 							shuffleStack();
@@ -493,7 +498,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 							load(args[1]);
 							bot.sendMessage({to: channelID,message: "LOADED"});//config.gameLoaded});
 						} else {
-							load(gamename);
+							load(gameName);
 							bot.sendMessage({to: channelID,message: "LOADED"});//config.gameLoaded});
 						}
 					} else {
