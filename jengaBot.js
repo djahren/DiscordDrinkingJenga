@@ -46,6 +46,14 @@ var authorizedUsers = [...permAdmins]; // clone permAdmins list
 var currentStack =[];
 var graveyard =[];
 var tileNames =[];
+var prevTile;
+var prevUser;
+var WAITSR = false;
+var gameOver = true;
+
+var userList = [];
+var usersGone = [];
+
 
 function initializeGame() {
 	console.log("Engage!");
@@ -88,13 +96,7 @@ function getTileByFuzzyName(query) {
 return [{ "name":results[0][0], "text": tileSet[results[0][0]].text },[results[1][0],results[2][0]]];
 }
 
-var prevTile;
-var prevUser;
-var WAITSR = false;
-var gameOver = true;
 
-var userList = [];
-var usersGone = [];
 
 //Remove players from player list
 function removeUserByID(userID) {
