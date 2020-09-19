@@ -148,6 +148,23 @@ function save(gameName) {
 	fs.writeFileSync(save_fn,saveObjText);
 }
 
+function load(gameName) {
+	var fn = "./saves/"+gamename+"_0.json";
+	// load save file
+	var saveObj = JSON.parse(fs.readFileSync(fn));
+	// read from save to game variables
+	userList = saveObj['userList'];
+	graveyard = saveObj['graveyard'];
+	authorizedUsers = saveObj['authorizedUsers'];
+	usersGone = saveObj['usersGone'];
+	prevTile = saveObj['prevTile'];
+	prevUser = saveObj['prevUser'];
+	currentStack = saveObj['currentStack'];
+	WAITSR = saveObj['WAITSR'];
+	gameOver = saveObj['gameOver'];
+	tileNames = saveObj['tileNames'];
+}
+
 //Deprecated //Used to prevent anyone from double joining
 // function isUser(userID) {
 	// return compareUsers(userList,userID);
