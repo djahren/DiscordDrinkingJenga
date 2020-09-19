@@ -56,7 +56,7 @@ var gameOver = true;
 var userList = [];
 var usersGone = [];
 
-var gameName = "IRW";
+var gamename = "Implement Random Words";
 
 function initializeGame() {
 	console.log("Engage!");
@@ -141,9 +141,9 @@ function nextUser() {
 }
 
 //
-function save() {
+function save(gameName) {
 	//rotateLogs(gameName);
-	var save_fn = "./saves/"+gameName+"_0.json";
+	var save_fn = "./saves/"+gamename+"_0.json";
 	var saveObj = { "userList": userList, "graveyard": graveyard, "authorizedUsers": authorizedUsers,
 		"usersGone": usersGone, "prevTile": prevTile, "prevUser": prevUser, "currentStack": currentStack,
 	"WAITSR": WAITSR, "gameOver": gameOver, "tileNames": tileNames};
@@ -152,7 +152,7 @@ function save() {
 }
 
 function load(gameName) {
-	var fn = "./saves/"+gameName+"_0.json";
+	var fn = "./saves/"+gamename+"_0.json";
 	// load save file
 	var saveObj = JSON.parse(fs.readFileSync(fn));
 	// read from save to game variables
@@ -188,15 +188,10 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 			globalChannelId = channelID;
 			switch(args[0]) {
 				// commands for all users
-				case 'rw':
-					bot.sendMessage({to:channelID, message: rw()});
-				break;
 				case 'start':
 					if (gameOver) {
 						if (userList.length > 0) {
 							gameOver = false;
-							gameName = rw({exactly: 2, join: '' });
-							console.log(gameName);
 							globalChannelId = channelID;
 							initializeGame();
 							shuffleStack();
@@ -498,7 +493,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 							load(args[1]);
 							bot.sendMessage({to: channelID,message: "LOADED"});//config.gameLoaded});
 						} else {
-							load(gameName);
+							load(gamename);
 							bot.sendMessage({to: channelID,message: "LOADED"});//config.gameLoaded});
 						}
 					} else {
