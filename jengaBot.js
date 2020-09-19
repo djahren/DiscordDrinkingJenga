@@ -218,7 +218,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 						bot.sendMessage({to: channelID,message: username + " drew\n**"+prevTile.name+"**:\n\t*"+ prevTile.text+"*"});
 						console.log(prevTile.name+": "+ prevTile.text); 
 						usersGone.push(prevUser);
-						
+						save();
 						// check if game is over
 						if (currentStack.length == 0 ){
 							gameOver = true;
