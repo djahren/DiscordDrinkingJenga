@@ -141,18 +141,18 @@ function nextUser() {
 }
 
 //
-function save(gameName) {
-	rotateSaves(gameName);
-	var save_fn = "./saves/"+gamename+"_0.json";
+function save(saveGameName) {
+	rotateSaves(saveGameName);
+	var save_fn = "./saves/"+saveGameName+"_0.json";
 	var saveObj = { "userList": userList, "graveyard": graveyard, "authorizedUsers": authorizedUsers,
 		"usersGone": usersGone, "prevTile": prevTile, "prevUser": prevUser, "currentStack": currentStack,
-	"WAITSR": WAITSR, "gameOver": gameOver, "tileNames": tileNames};
+	"WAITSR": WAITSR, "gameOver": gameOver, "tileNames": tileNames, "gameName": saveGameName};
 	var saveObjText = JSON.stringify(saveObj);
 	fs.writeFileSync(save_fn,saveObjText);
 }
 
-function load(gameName) {
-	var fn = "./saves/"+gamename+"_0.json";
+function load(loadGameName) {
+	var fn = "./saves/"+loadGameName+"_0.json";
 	// load save file
 	var saveObj = JSON.parse(fs.readFileSync(fn));
 	// read from save to game variables
@@ -166,6 +166,7 @@ function load(gameName) {
 	WAITSR = saveObj['WAITSR'];
 	gameOver = saveObj['gameOver'];
 	tileNames = saveObj['tileNames'];
+	gameName = saveObj['gameName'];
 	shuffleStack();
 }
 
