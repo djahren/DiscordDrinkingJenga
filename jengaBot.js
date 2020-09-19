@@ -141,7 +141,7 @@ function nextUser() {
 
 //
 function save(gameName) {
-	//rotateLogs(gameName);
+	rotateSaves(gameName);
 	var save_fn = "./saves/"+gamename+"_0.json";
 	var saveObj = { "userList": userList, "graveyard": graveyard, "authorizedUsers": authorizedUsers,
 		"usersGone": usersGone, "prevTile": prevTile, "prevUser": prevUser, "currentStack": currentStack,
@@ -166,6 +166,10 @@ function load(gameName) {
 	gameOver = saveObj['gameOver'];
 	tileNames = saveObj['tileNames'];
 	shuffleStack();
+}
+
+function rotateSaves(gameName) {
+	
 }
 
 //Deprecated //Used to prevent anyone from double joining
