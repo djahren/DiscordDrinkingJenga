@@ -169,6 +169,9 @@ function load(loadGameName) {
 	shuffleStack();
 }
 
+function rollDice(max) {
+	return Math.ceil(Math.random()*max);
+}
 //Deprecated //Used to prevent anyone from double joining
 // function isUser(userID) {
 	// return compareUsers(userList,userID);
@@ -308,6 +311,18 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				break;
 				case 'gamename':
 					bot.sendMessage({to: channelID,message: "Current game name is: "+gameName});
+				break;
+				case 'roll':
+					if (args[1]) {
+						args[1] = parseInt(args[1]);
+						if (args[1] > 0) {
+							bot.sendMessage({to: channelID,message: "Result of "+username+"'s d"+args[1]+" roll: "+rollDice(arg[1]);
+						} else { 
+							bot.sendMessage({to: channelID,message: config.rollUsageMsg});
+						}
+					} else { 
+						bot.sendMessage({to: channelID,message: config.rollUsageMsg});
+					}
 				break;
 				// admin commands
 				case 'skip':

@@ -28,5 +28,6 @@
 	"addminUsageMsg": "To use !addmin, use the player's discord username: !addmin username",
 	"removeadminUsageMsg": "To use !removeadminUsageMsg, use the player's discord username: !removeadmin username",
 	"graveyardEmptyWarn": "Graveyard is empty. Draw some tiles first ya walnut",
-	"saveInfoMsg": "Game is saved! (note: game is saved after every draw)"
+	"saveInfoMsg": "Game is saved! (note: game is saved after every draw)",
+	"rollUsageMsg": "To use !roll, specify the max number for the roll, e.g.: !roll 6"
 }
