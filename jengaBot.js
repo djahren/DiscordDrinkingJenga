@@ -55,6 +55,7 @@ var gameOver = true;
 var userList = [];
 var usersGone = [];
 
+var gamename = "Implement Random Words";
 
 function initializeGame() {
 	console.log("Engage!");
@@ -140,11 +141,11 @@ function nextUser() {
 //
 function save(gameName) {
 	//rotateLogs(gameName);
-	save_fn = "./saves/"+gamename+"_0.json";
-	saveObj = { "userList": userList, "graveyard": graveyard, "authorizedUsers": authorizedUsers,
+	var save_fn = "./saves/"+gamename+"_0.json";
+	var saveObj = { "userList": userList, "graveyard": graveyard, "authorizedUsers": authorizedUsers,
 		"usersGone": usersGone, "prevTile": prevTile, "prevUser": prevUser, "currentStack": currentStack,
 	"WAITSR": WAITSR, "gameOver": gameOver, "tileNames": tileNames};
-	saveObjTxt = JSON.stringify(saveObj);
+	var saveObjText = JSON.stringify(saveObj);
 	fs.writeFileSync(save_fn,saveObjText);
 }
 
@@ -472,6 +473,25 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 						} else {
 							bot.sendMessage({to: channelID,message: config.graveyardEmptyWarn});
 						}							
+					} else {
+						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
+					}
+				break;
+				case 'save':
+					if (isAuthorized(userID)) {
+						save();						
+					} else {
+						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
+					}
+				break;
+				case 'load':
+					if (isAuthorized(userID)) {
+						if (args[1]) {
+							load(args[1]);
+							bot.sendMessage({to: channelID,message: "LOADED"});//config.gameLoaded});
+						} else {
+							bot.sendMessage({to: channelID,message: config.apartMsg});
+						}
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 					}

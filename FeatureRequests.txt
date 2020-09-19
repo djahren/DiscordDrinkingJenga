@@ -18,3 +18,8 @@ Known Issues:
 		non-sexy tileset
 		!tileset [list|load [name(s)]|unload [name(s)]]
 	Post Draw Functions
+	
+add to help
+	save
+	load
+	gamename
