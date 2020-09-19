@@ -5,6 +5,7 @@ var logger = require('winston');
 var fuzz = require('fuzzball');
 var auth = require('./auth.json');
 var config = require('./config.json');
+const fs = require('fs');
 // var tileSet = require('./test_tiles.json');
 var tileSet = require('./tiles.json');
 var emptyUser = { username: "empty", userID: "empty"};
@@ -134,6 +135,17 @@ function nextUser() {
 		bot.sendMessage({to: globalChannelId,message: config.noUsersWarn });
 		return emptyUser;
 	}
+}
+
+//
+function save(gameName) {
+	//rotateLogs(gameName);
+	save_fn = "./saves/"+gamename+"_0.json";
+	saveObj = { "userList": userList, "graveyard": graveyard, "authorizedUsers": authorizedUsers,
+		"usersGone": usersGone, "prevTile": prevTile, "prevUser": prevUser, "currentStack": currentStack,
+	"WAITSR": WAITSR, "gameOver": gameOver, "tileNames": tileNames};
+	saveObjTxt = JSON.stringify(saveObj);
+	fs.writeFileSync(save_fn,saveObjText);
 }
 
 //Deprecated //Used to prevent anyone from double joining
