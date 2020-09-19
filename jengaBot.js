@@ -6,6 +6,7 @@ var fuzz = require('fuzzball');
 var auth = require('./auth.json');
 var config = require('./config.json');
 const fs = require('fs');
+const rw = require('random-words');
 // var tileSet = require('./test_tiles.json');
 var tileSet = require('./tiles.json');
 var emptyUser = { username: "empty", userID: "empty"};
