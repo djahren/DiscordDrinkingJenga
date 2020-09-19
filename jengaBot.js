@@ -193,10 +193,15 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 			globalChannelId = channelID;
 			switch(args[0]) {
 				// commands for all users
+				case 'rw':
+					bot.sendMessage({to:channelID, message: rw()});
+				break;
 				case 'start':
 					if (gameOver) {
 						if (userList.length > 0) {
 							gameOver = false;
+							gameName = rw({exactly: 2, join: '' });
+							console.log("Game Name: " + gameName);
 							globalChannelId = channelID;
 							initializeGame();
 							shuffleStack();
@@ -207,7 +212,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					} else {
 						bot.sendMessage({to:channelID, message: "Silly <@"+userID + ">! The game's already started!"});
 					}
-				break; 
+				break;  
 				case 'draw':
 					if (gameOver) {
 						bot.sendMessage({to: channelID,message: config.gameOverWarn});
@@ -226,7 +231,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 						bot.sendMessage({to: channelID,message: username + " drew\n**"+prevTile.name+"**:\n\t*"+ prevTile.text+"*"});
 						console.log(prevTile.name+": "+ prevTile.text); 
 						usersGone.push(prevUser);
-						//save();
+						save();
 						// check if game is over
 						if (currentStack.length == 0 ){
 							gameOver = true;
