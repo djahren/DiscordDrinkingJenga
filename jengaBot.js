@@ -291,7 +291,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 							var results = getTileByFuzzyName(args[1]);
 							var tile = results[0];
 							var didyoumean = results[1];
-							bot.sendMessage({to: channelID,message: "Description of tile **"+tile.name+"**:\n"+tile.text+"\n\n"+"*Other close matches: **"+didyoumean[0]+"** and **"+didyoumean[1]+"** *"});
+							bot.sendMessage({to: channelID,message: "Description of tile **"+tile.name+"**:\n"+tile.text+"\n\n"+"*Other close matches: **"+didyoumean[0]+"** and **"+didyoumean[1]+"***"});
 						} else {
 							bot.sendMessage({to: channelID,message:config.missingArgWarn+"\n"+config.kickUsageMsg});
 						}
