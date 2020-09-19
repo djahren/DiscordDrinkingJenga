@@ -56,7 +56,7 @@ var gameOver = true;
 var userList = [];
 var usersGone = [];
 
-var gamename = "Implement Random Words";
+var gameName = "Implement Random Words";
 
 function initializeGame() {
 	console.log("Engage!");
