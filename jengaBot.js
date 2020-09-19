@@ -316,7 +316,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					if (args[1]) {
 						args[1] = parseInt(args[1]);
 						if (args[1] > 0) {
-							bot.sendMessage({to: channelID,message: "Result of "+username+"'s d"+args[1]+" roll: "+rollDice(arg[1])});
+							bot.sendMessage({to: channelID,message: "Result of "+username+"'s d"+args[1]+" roll: "+rollDice(args[1])});
 						} else { 
 							bot.sendMessage({to: channelID,message: config.rollUsageMsg});
 						}
