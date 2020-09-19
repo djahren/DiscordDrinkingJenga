@@ -142,8 +142,7 @@ function nextUser() {
 
 //
 function save() {
-	rotateSaves();
-	var save_fn = "./saves/"+gameName+"_0.json";
+	var save_fn = "./saves/"+gameName+".json";
 	var saveObj = { "userList": userList, "graveyard": graveyard, "authorizedUsers": authorizedUsers,
 		"usersGone": usersGone, "prevTile": prevTile, "prevUser": prevUser, "currentStack": currentStack,
 	"WAITSR": WAITSR, "gameOver": gameOver, "tileNames": tileNames, "gameName": gameName};
@@ -151,8 +150,8 @@ function save() {
 	fs.writeFileSync(save_fn,saveObjText);
 }
 
-function load(loadGameName,level=0) {
-	var fn = "./saves/"+loadGameName+"_"+level+".json";
+function load(loadGameName) {
+	var fn = "./saves/"+loadGameName+".json";
 	// load save file
 	var saveObj = JSON.parse(fs.readFileSync(fn));
 	// read from save to game variables
@@ -168,10 +167,6 @@ function load(loadGameName,level=0) {
 	tileNames = saveObj['tileNames'];
 	gameName = saveObj['gameName'];
 	shuffleStack();
-}
-
-function rotateSaves() {
-	
 }
 
 //Deprecated //Used to prevent anyone from double joining
