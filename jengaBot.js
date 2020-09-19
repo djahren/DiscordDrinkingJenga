@@ -489,7 +489,8 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				break;
 				case 'save':
 					if (isAuthorized(userID)) {
-						save();						
+						save();
+						bot.sendMessage({to: channelID, message: config.saveInfoMsg});
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
 					}
