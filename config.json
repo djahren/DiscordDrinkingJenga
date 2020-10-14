@@ -16,7 +16,7 @@
 	"alreadyJoinedWarn": "Hang on there bucko, you're already in the game 😑",
 	"newRoundMsg": "New round is starting!",
 	"invalidArgWarn": "Invalid argument for that command.",
-	"gameEndMsg": "Game ended. Use !join and !start to get things back up and running.",
+	"gameEndMsg": "Game ended, all users have been removed from the game. To continue playing, use !join and !start to get things back up and running.",
 	"alreadyAdminWarn": "User is already an admin.",
 	"readyMsg": "I'm alive and ready to play! Use !help to see commands",
 	"noAdminsWarn": "Whoop! Looks like there are no admins in the game at the moment. If you need one, ask Abe or Michael to admin someone. They're always admins 😉",
