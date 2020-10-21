@@ -491,15 +491,11 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					}
 				break;
 				case 'graveyard':
-					if (isAuthorized(userID)) {
-						var graveyardString = graveyard.join(", ");
-						if (graveyardString.length > 0){
-							bot.sendMessage({to: channelID,message: graveyardString});
-						} else {
-							bot.sendMessage({to: channelID,message: config.graveyardEmptyWarn});
-						}							
+					var graveyardString = graveyard.join(", ");
+					if (graveyardString.length > 0){
+						bot.sendMessage({to: channelID,message: graveyardString});
 					} else {
-						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
+						bot.sendMessage({to: channelID,message: config.graveyardEmptyWarn});
 					}
 				break;
 				case 'save':
