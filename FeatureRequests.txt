@@ -21,6 +21,20 @@ Known Issues:
 	
 	
 	
+	
+Suggestions from Birfday:
+	Fashionista: add "everyone". maybe check other tiles for language consistency
+
+	maybe make the order of drinking jenga automatically alphabetical (if it is possible)?
+		might be able to do? getting ahold of server nicknames is unfortunately not very easy from the discord api
+		and by "not easy" I mean potentially not possible; as you've probably noticed, unless it's an @ mention the bot never uses nicknames, and that's something that gets processed after the message leaves the bot
+
+	Off With Their Panties!:
+		Remove article of underwear
+		/socks
+	
+	make graveyard an everybody command
+	
 Features Added:
 	!detail
 	!save/!load
