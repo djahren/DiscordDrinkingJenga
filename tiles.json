@@ -75,14 +75,14 @@
 	"Wild": {"text": "Drawer gets to decide which tile they do. If you need inspiration, search for specific tiles with !detail or look at the !graveyard", "count": 1,"WAITSR": false},
 	"Get Off My Lawn": {"text": "Oldest Person Drinks", "count": 1,"WAITSR": false},
 	"Tide Pods": {"text": "Youngest Person Drinks", "count": 1,"WAITSR": false},
-	"The Real Slim Shady": {"text": "Drawer stays standing for 1 round", "count": 1,"WAITSR": false},
+	"The Real Slim Shady": {"text": "Drawer stays standing for 1 round or 10 draws, whichever is shorter", "count": 1,"WAITSR": false},
 	"Dog People": {"text": "Everyone drinks for each dog you own", "count": 1,"WAITSR": false},
 	"Cat People": {"text": "Everyone drinks for each cat you own", "count": 1,"WAITSR": false},
 	"Tall Boi": {"text": "Tallest Person Drinks", "count": 1,"WAITSR": false},
 	"Shawty": {"text": "Shortest Person Drinks", "count": 1,"WAITSR": false},
 	"Arm Wrestle": {"text": "Pick a person to arm wrestle; loser drinks", "count": 1,"WAITSR": true},
 	"Time Warp": {"text": "Re-do the previous tile", "count": 1,"WAITSR": false},
-	"Graveyard": {"text": "Grab a tile out of the graveyard and do it", "count": 1,"WAITSR": false},
+	"Graveyard": {"text": "Grab a tile out of the graveyard and do it. !graveyard lists all previously drawn tiles.", "count": 1,"WAITSR": false},
 	"Tribal Council": {"text": "Everyone votes, person with most votes finishes their drinks", "count": 1,"WAITSR": false},
 	"Sibling Rivalry": {"text": "Everyone drinks for every sibling you have", "count": 1,"WAITSR": false},
 	"Pangaea": {"text": "Everyone drinks for every continent you've touched", "count": 1,"WAITSR": false},
@@ -110,5 +110,6 @@
 	"SLAM it, bro": {"text": "Make someone finish their drink. Point and shout 'Chug bitch!'", "count": 1,"WAITSR": false},
 	"Finish Yo Drank": {"text": "Yell 'FINISH HIM!' and finish your drink", "count": 1,"WAITSR": false},
 	"Kiss Left Slap Left": {"text": "Kiss the person to your left, slap the person to your left", "count": 1,"WAITSR": true},
-	"Kiss Right Slap Right": {"text": "Kiss the person to your right, slap the person to your right", "count": 1,"WAITSR": true}
+	"Kiss Right Slap Right": {"text": "Kiss the person to your right, slap the person to your right", "count": 1,"WAITSR": true},
+	"Guilty Pleasure": {"text": "Tell us about a guilty pleasure", "count": 1,"WAITSR": false}
 }
