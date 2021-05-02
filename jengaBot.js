@@ -64,7 +64,7 @@ function initializeGame() {
 	var cloneState = JSON.parse(JSON.stringify(tileSet));
 	Object.keys(cloneState).forEach(title =>{
 		var tilename = title;
-		tileNames.push(tilename);
+		tileNames.push(tilename); // move to the isValid loop for WAITSR compatibility, need to account for count in this (if count ==1 ?)
 		var tile = cloneState[title];
 		while(isValid(tile)) { // only adds tiles with proper count and WAITSR state
 			currentStack.push( { "name":tilename, "text":tile.text } );
@@ -92,6 +92,8 @@ function shuffleStack() { // shuffle current stack with fisher-yates
 	}
 }
 
+// two problems: multiple identical tiles are being returned (might be related to tiles with count>1? though it happened with compliments so maybe not
+// also, doesn't take into account current WAITSR state. look into this.
 function getTileByFuzzyName(query) {
 	console.log("Searching for tile with query: "+query);
 	var results = fuzz.extract(query,tileNames);
