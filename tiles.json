@@ -47,7 +47,7 @@
 	"Insults": {"text": "Insult everyone in the room, one at a time, maintaining eye contact", "count": 1,"WAITSR": false},
 	"lmgtfy": {"text": "What was the last thing you googled?", "count": 1,"WAITSR": false},
 	"Off With Their Panties!": {"text": "Remove article of underwear", "count": 1,"WAITSR": false},
-	"Be a viking": {"text": "Get a braid", "count": 1,"WAITSR": false},
+	"Be a viking": {"text": "Get a braid", "count": 1,"WAITSR": true},
 	"Nerd": {"text": "What was the last video game you played?", "count": 1,"WAITSR": false},
 	"Jock": {"text": "What was the last sporty activity you participated in?", "count": 1,"WAITSR": false},
 	"Amazon": {"text": "What was the last thing you ordered online?", "count": 1,"WAITSR": false},
