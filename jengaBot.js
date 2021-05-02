@@ -511,8 +511,13 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				case 'load':
 					if (isAuthorized(userID)) {
 						if (args[1]) {
-							load(args[1]);
-							bot.sendMessage({to: channelID,message: "LOADED"});//config.gameLoaded});
+							try {
+								load(args[1]);
+								bot.sendMessage({to: channelID,message: "LOADED"});
+							} catch (err) {
+								bot.sendMessage({to: channelID,message: err});
+							}
+							//config.gameLoaded});
 						} else {
 							load(gamename);
 							bot.sendMessage({to: channelID,message: "LOADED"});//config.gameLoaded});
