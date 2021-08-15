@@ -61,6 +61,10 @@ var gameName = "Implement Random Words";
 function initializeGame() {
 	console.log("Engage!");
 	graveyard =[];
+	currentStack =[];
+	tileNames =[];
+	usersGone = [];
+	gameOver = false;
 	var cloneState = JSON.parse(JSON.stringify(tileSet));
 	Object.keys(cloneState).forEach(title =>{
 		var tilename = title;
@@ -108,11 +112,13 @@ function getTileByFuzzyName(query) {
 function removeUserByID(userID) {
 	var l = userList.length;
 	userList = userList.filter(u => u.userID != userID);
+	console.log("Attempt to remove user by ID " + userID + ". Did it work?: "+ (l > userList.length) );
 	return l > userList.length;
 }
 function removeUserByName(username) {
 	var l = userList.length;
 	userList = userList.filter(u => u.username.toLowerCase() != username.toLowerCase()); 
+	console.log("Attempt to remove user by username " + username + ". Did it work?: "+ (l > userList.length) );
 	return l > userList.length;
 }
 
@@ -154,6 +160,7 @@ function save() {
 
 function load(loadGameName) {
 	var fn = "./saves/"+loadGameName+".json";
+	console.log("Loading save from file: " + fn +" ...");
 	// load save file
 	var saveObj = JSON.parse(fs.readFileSync(fn));
 	// read from save to game variables
@@ -169,6 +176,7 @@ function load(loadGameName) {
 	tileNames = saveObj['tileNames'];
 	gameName = saveObj['gameName'];
 	shuffleStack();
+	console.log("Game: " + loadGameName + " successfully loaded!");
 }
 
 function rollDice(max) {
@@ -199,13 +207,12 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				case 'start':
 					if (gameOver) {
 						if (userList.length > 0) {
-							gameOver = false;
 							gameName = rw({exactly:2, join: '', formatter: (word, index)=> {return index === 0 ? word.slice(0,1).toUpperCase().concat(word.slice(1)) : word;}});
 							console.log("Game Name: " + gameName);
 							globalChannelId = channelID;
 							initializeGame();
 							shuffleStack();
-							bot.sendMessage({to:channelID, message: "Welcome! Your game name is " + gameName + "\n<@"+nextUser().userID + "> goes first! Get things started with !draw"});
+							bot.sendMessage({to:channelID, message: "Welcome! Your game name is " + gameName + " and we " + (WAITSR ? "ARE" : "are NOT" ) + " in the same room." +"\n\n<@"+nextUser().userID + "> goes first! Get things started with !draw"});
 						} else {
 							bot.sendMessage({to: channelID,message: config.noUsersWarn });
 						}
@@ -451,8 +458,6 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					if (isAuthorized(userID)) {
 						initializeGame();
 						shuffleStack();
-						usersGone = [];
-						gameOver = false;
 						bot.sendMessage({to: channelID,message: config.resetMsg});
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
@@ -472,11 +477,11 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 							switch(args[1].toLowerCase()) {
 								case 'true':
 									WAITSR = true;
-									bot.sendMessage({to: channelID,message: config.sameRoomMsg});
+									bot.sendMessage({to: channelID,message: config.sameRoomMsg + (gameOver ? "" : "\n\n" + config.needResetWarn)});
 								break;
 								case 'false':
 									WAITSR = false;
-									bot.sendMessage({to: channelID,message: config.apartMsg});
+									bot.sendMessage({to: channelID,message: config.apartMsg + (gameOver ? "" : "\n\n" + config.needResetWarn)});
 								break;
 								default:
 									bot.sendMessage({to: channelID,message: config.invalidArgWarn});

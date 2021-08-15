@@ -10,6 +10,7 @@
 	"shuffleMsg": "Tiles have been shuffled!",
 	"sameRoomMsg": "We are in the same room!",
 	"apartMsg": "We are NOT in the same room.",
+	"needResetWarn": "For this change to take effect, an admin needs to !reset the game.",
 	"notAPlayerWarn": "ERROR 404: Player not found.",
 	"notYourTurnWarn": "Wait a second, it's not your turn. Wait your turn or !join.",
 	"noUsersWarn": "No users have joined the game.",
