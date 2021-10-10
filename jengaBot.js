@@ -192,6 +192,16 @@ function load(loadGameName) {
 function rollDice(max) {
 	return Math.ceil(Math.random()*max);
 }
+
+function sortTiles(inputTiles){
+	return Object.keys(inputTiles).sort(function(a,b){
+		return a.localeCompare(b)
+	}).reduce(function (sortedTiles, key) {
+		sortedTiles[key] = inputTiles[key];
+		return sortedTiles;
+	  }, {});
+}
+
 //Deprecated //Used to prevent anyone from double joining
 // function isUser(userID) {
 	// return compareUsers(userList,userID);
@@ -543,6 +553,23 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				break;
 				case 'adminhelp':
 					bot.sendMessage({to: channelID,message: config.adminHelpMsg});
+				break;
+				case 'tileset':
+					let sortedTiles = sortTiles(tileSet);
+					let tilesOutput = "" //concatenate 
+					for(let tileName in sortedTiles){
+						let tileText = ""
+						if(WAITSR || (!WAITSR && !tileName.WAITSR)){
+							tileText = tileName + ": " + sortedTiles[tileName].text + "\n"
+						}
+						tilesOutput += tileText
+					}
+					
+					fs.writeFileSync("tileset.txt",tilesOutput); //output to text file
+					
+					bot.uploadFile({to: channelID, file:"tileset.txt", // send via text file
+						message: `All tiles${(WAITSR ? "" : " (excluding ones for same room games)")}:`});
+
 				break;
 				default:
 					bot.sendMessage({to: channelID,message: config.unknownCmd});
