@@ -29,7 +29,7 @@ bot.on('ready', function (evt) {
     logger.info('Connected');
     logger.info('Logged in as: ');
     logger.info(bot.username + ' - (' + bot.id + ')');
-	if(config.commandPrefix != "!"){
+	if(config.commandPrefix != "!"){ //replace command names in config file if non-default prefix is set.
 		for(const key in config){
 			if(typeof config[key] === 'string'){
 				config[key] = config[key].replace(new RegExp('`!', 'g'),"`" + config.commandPrefix)
