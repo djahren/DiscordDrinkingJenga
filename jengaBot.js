@@ -333,7 +333,11 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 				
 				break;
 				case 'tilesleft':
-					bot.sendMessage({to:channelID, message: "There are exactly " + currentStack.length + " tiles left in the game."});
+					if(!gameOver){
+						bot.sendMessage({to:channelID, message: "There are exactly " + currentStack.length + " tiles left in the game."});
+					} else {
+						bot.sendMessage({to:channelID, message: "No tiles have been added: "+config.gameOverWarn});
+					}
 				break;
 				case 'help':
 					bot.sendMessage({to: channelID,message: config.helpMsg});
@@ -559,7 +563,7 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 					let tilesOutput = "" //concatenate 
 					for(let tileName in sortedTiles){
 						let tileText = ""
-						if(WAITSR || (!WAITSR && !tileName.WAITSR)){
+						if(WAITSR || (!WAITSR && !sortedTiles[tileName].WAITSR)){
 							tileText = tileName + ": " + sortedTiles[tileName].text + "\n"
 						}
 						tilesOutput += tileText
