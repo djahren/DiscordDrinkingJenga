@@ -4,7 +4,8 @@
 	"description": "A bot for playing a drinking jenga/dominoes-style game.",
 	"author": "Warofwest, OddOod, djahren",
 	"scripts": {
-		"start": "node jengaBot.js"
+		"start": "node jengaBot.js",
+		"setup": "node configurator.js"
 	  },
 	"dependencies": {
 		"discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
