@@ -5,7 +5,7 @@ Download and extract, or clone this repository.
 Install node (nodejs.org).
 Open a command prompt, navigate to the files you extracted.  
 ```
-    npm install
+npm install
 ```
 Go to [How to Make a Discord Bot](https://www.digitaltrends.com/gaming/how-to-make-a-discord-bot/), follow steps 2-4 to get auth token and add bot to your server. Make sure your bot has permission to View Channels and Send Messages.
 
@@ -14,17 +14,17 @@ Create file auth.json in the bot directory, contents should be:
 ```{"token":"[your token]"}```
 
 Edit config.json  
-• replace permadmins with your (and your fellow admins) [userIds](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-). Make sure to keep it in a list of strings.
-• replace both instances of "Abe or Michael" with then names of your admin(s).
+• replace permadmins with your (and your fellow admins) [userIds](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-). Make sure to keep it in a list of strings.  
+• replace both instances of "Abe or Michael" with then names of your admin(s).  
 
-On Windows:
-• Run RunBot.bat as admin.
-On Mac/Linux:
-• Run `node ./jengaBot.js` from a terminal.
-To run with Docker:
+On Windows:  
+• Run RunBot.bat as admin.  
+On Mac/Linux:  
+• Run `node ./jengaBot.js` from a terminal.  
+To run with Docker:  
 ```
-    docker build -t drinkingjengabot .
-    docker run -d --restart unless-stopped drinkingjengabot
+docker build -t drinkingjengabot .
+docker run -d --restart unless-stopped drinkingjengabot
 ```
 
 Once the bot is live, use `!help` or `!adminhelp` to get list of commands. 
