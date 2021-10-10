@@ -7,6 +7,8 @@ Feature Requests:
 		
 Known Issues:
 	!admindraw doesn't respect !decline
+	Bot silently dies after ~1-3 hours? Impliment silent restart for docker?
+	First time running (after a while?) gives error. Second time works fine
 
 1.5
 	custom tile sets

@@ -29,8 +29,18 @@ bot.on('ready', function (evt) {
     logger.info('Connected');
     logger.info('Logged in as: ');
     logger.info(bot.username + ' - (' + bot.id + ')');
-	// 695648112890609695 <- hardcoded jenga text channelID
-	bot.sendMessage({to: "695648112890609695",message: config.readyMsg });
+	if(config.commandPrefix != "!"){ //replace command names in config file if non-default prefix is set.
+		for(const key in config){
+			if(typeof config[key] === 'string'){
+				config[key] = config[key].replace(new RegExp('`!', 'g'),"`" + config.commandPrefix)
+			}
+		}
+	}
+	if(config.channelID){ //only send message if default channel is set in config
+		bot.sendMessage({to: config.channelID, message: config.readyMsg });
+		globalChannelId = config.channelID;
+	}
+	
 });
 
 // tile is acceptable if count isn't depleted and tile WAITSR constraint satisfied
@@ -190,11 +200,11 @@ function rollDice(max) {
 
 bot.on('message', function (username, userID, channelID, message, evt) {
     // Our bot needs to know if it will execute a command
-    // It will listen for messages that will start with `!`
+    // It will listen for messages that will start with `!` or commandPrefix set in config.json
 	if (gameOver || channelID == globalChannelId) {
-		if (message.substring(0, 1) == '!') {
+		if (message.substring(0, config.commandPrefix.length) == config.commandPrefix) {
 			message = message.toLowerCase();
-			var args = message.substring(1).split(' ');
+			var args = message.substring(config.commandPrefix.length).split(' ');
 			if (args.length > 1) {
 				args[1] = args.slice(1).join(' ');
 			}
@@ -522,13 +532,13 @@ bot.on('message', function (username, userID, channelID, message, evt) {
 							} catch (err) {
 								bot.sendMessage({to: channelID,message: err});
 							}
-							//config.gameLoaded});
-						} else {
-							load(gamename);
-							bot.sendMessage({to: channelID,message: "LOADED"});//config.gameLoaded});
+						}
+						else {
+							bot.sendMessage({to: channelID,message: config.missingArgWarn});
 						}
 					} else {
 						bot.sendMessage({to: channelID,message: config.unauthorizedMsg});
+						
 					}
 				break;
 				case 'adminhelp':
