@@ -3,25 +3,22 @@ A bot to play drinking jenga in Discord
 
 Download and extract, or clone this repository.
 Install node (nodejs.org).
-Open a command prompt, navigate to the files you extracted.  
+Open a command prompt, navigate to the files you extracted. 
+Run the following command:   
 ```
 npm install
 ```
 Go to [How to Make a Discord Bot](https://www.digitaltrends.com/gaming/how-to-make-a-discord-bot/), follow steps 2-4 to get auth token and add bot to your server. Make sure your bot has permission to View Channels and Send Messages.
 
-Create file auth.json in the bot directory, contents should be:   
+Run the configurator: 
+```
+npm run setup
+```
 
-```{"token":"[your token]"}```
-
-Edit config.json  
-• replace permadmins with your (and your fellow admins) [userIds](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-). Make sure to keep it in a list of strings.  
-• replace both instances of "Abe or Michael" with then names of your admin(s).  
-
-On Windows:  
-• Run RunBot.bat as admin.  
-On Mac/Linux:  
-• Run `node ./jengaBot.js` from a terminal.  
-To run with Docker:  
+Run the bot: 
+On Windows, run RunBot.bat as admin or  
+On Windows/Mac/Linux, run `npm start` from a terminal or  
+Via Docker:  
 ```
 docker build -t drinkingjengabot .
 docker run -d --restart unless-stopped drinkingjengabot
@@ -40,3 +37,11 @@ Step 2: Perform some postprocessing to properly form the JSON: add surrounding c
 Step 3: Confirm that the JSON is properly formed, and fix any small discrepancies that may arise. We encountered some discrepancies after Steps 1 and 2, but we're unsure if they were user error or mistakes in the regular expression.  
 
 Note: This bot only can support a single server currently.
+
+Manual configuration (if not using the configurator):  
+Create file auth.json in the bot directory, contents should be:   
+```{"token":"[your token]"}```
+
+Edit config.json  
+• replace permadmins with your (and your fellow admins) [userIds](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-). Make sure to keep it in a list of strings.  
+• replace both instances of "Abe or Michael" with then names of your admin(s).  
