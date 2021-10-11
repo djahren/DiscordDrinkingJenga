@@ -24,8 +24,8 @@ function confirmYesNo(question){
 }
 
 //1. follow instructions to add bot to server
-console.log("Welcome to the DrinkingJengaBot configurator! \nWe'll help you get your bot setup and ready to play!\n")
-console.log("Step 1: Create your bot.\nTo get started, head to https://www.digitaltrends.com/gaming/how-to-make-a-discord-bot/ and complete steps 2-4.\n")
+console.log("Welcome to the DiscordDrinkingJenga configurator! \nWe'll help you get your bot setup and ready to play!\n")
+console.log("Step 1: Create your bot.\nTo get started, head to https://www.digitaltrends.com/gaming/how-to-make-a-discord-bot/ and complete steps 2-4.\nMake sure your bot has permission to View Channels and Send Messages.")
 
 
 //2. paste token if auth.json doens't exist else note that it already exists
@@ -33,7 +33,7 @@ var auth = {}; var needToken = true;
 var auth_fn = './auth.json'; 
 var tokenRegex = /[M-Z][A-Za-z\d]{23}\.[\w-]{6}\.[\w-]{27}/;
 
-console.log("Step 2: Setup auth.json.")
+console.log("\nStep 2: Setup auth.json.")
 if(fs.existsSync(auth_fn)){
     auth = JSON.parse(fs.readFileSync(auth_fn));
     if(auth.token && auth.token.match(tokenRegex)){
@@ -97,6 +97,8 @@ while(selection != "3"){
             break;
     }
 }
+console.log("Note: You may want to manually edit config.json and replace both instances of 'Abe or Michael' with your admin(s) name(s).")
+//TODO: replace names with code instead
     
 //4. optional set channelID - skip to allow bot in any channel
 console.log("\nStep 4 (Optional): Set dedicated channel ID.")
