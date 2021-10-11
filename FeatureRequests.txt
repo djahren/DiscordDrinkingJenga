@@ -1,5 +1,4 @@
 Feature Requests:
-	!tileset displays all tile names
 	clarify "May the Odds Be Ever In Your Favor" line 94
 		someone rolls (d6?), drawer drinks #?
 		roll off? winner drinks loser's #?
@@ -41,3 +40,4 @@ Features Added:
 	!detail
 	!save/!load
 	!graveyard
+	!tileset
