@@ -1,9 +1,23 @@
 /* jshint esversion: 6 */
 /* jshint node: true */
-var Discord = require('discord.io');
-var logger = require('winston');
-var fuzz = require('fuzzball');
-var auth = require('./auth.json');
+try{
+	var Discord = require('discord.io');
+	var logger = require('winston');
+	var fuzz = require('fuzzball');
+} catch{
+    console.log("Please make sure Node is installed and run 'npm install' first.");
+    process.exit()
+}
+try{
+	var auth = require('./auth.json');
+	if(!auth.token){
+		throw("auth.json exists, but no token is set.")
+	}
+} catch {
+	console.log("Issue with auth.json. Please run 'npm run setup' first.")
+	process.exit()
+}
+
 var config = require('./config.json');
 const fs = require('fs');
 const rw = require('random-words');
