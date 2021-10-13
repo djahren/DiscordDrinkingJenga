@@ -2,7 +2,7 @@
 A bot to play drinking jenga in Discord
 
 Download and extract, or clone this repository.
-Install node (nodejs.org).
+Install node (nodejs.org) - version 16.6.0 or greater.
 Open a command prompt, navigate to the files you extracted. 
 Run the following command:   
 ```

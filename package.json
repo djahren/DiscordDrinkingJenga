@@ -8,7 +8,7 @@
 		"setup": "node configurator.js"
 	},
 	"dependencies": {
-		"discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+		"discord.js": "^13.2.0",
 		"fuzzball": "^1.3.0",
 		"prompt-sync": "^4.2.0",
 		"random-words": "^1.1.1",
