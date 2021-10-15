@@ -1,0 +1,31 @@
+!draw
+!decline
+!detail toddler
+!graveyard
+!turn
+!order
+!tilesleft
+!tileset
+!gamename
+!roll 6
+!admins
+!leave
+!join
+!help
+!adminhelp
+!reset
+!shuffle
+!sameroom true
+!boot djahren
+!join
+!kick djahren
+!join
+!start
+!skip
+!admindraw
+!addmin djahren
+!removeadmin djahren
+!clearusers
+!save
+!end
+!load 
