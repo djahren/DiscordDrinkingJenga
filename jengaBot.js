@@ -94,10 +94,10 @@ function initializeGame() {
 	var cloneState = JSON.parse(JSON.stringify(tileSet));
 	Object.keys(cloneState).forEach(title =>{
 		var tilename = title;
-		tileNames.push(tilename); // move to the isValid loop for WAITSR compatibility, need to account for count in this (if count ==1 ?)
 		var tile = cloneState[title];
 		while(isValid(tile)) { // only adds tiles with proper count and WAITSR state
 			currentStack.push( { "name":tilename, "text":tile.text } );
+			if (tile.count == 1) tileNames.push(tilename);
 			tile.count--;
 		}
 	});
@@ -122,8 +122,7 @@ function shuffleStack() { // shuffle current stack with fisher-yates
 	}
 }
 
-// two problems: multiple identical tiles are being returned (might be related to tiles with count>1? though it happened with compliments so maybe not
-// also, doesn't take into account current WAITSR state. look into this.
+
 function getTileByFuzzyName(query) {
 	console.log("Searching for tile with query: "+query);
 	var results = fuzz.extract(query,tileNames);
@@ -444,16 +443,22 @@ client.on('messageCreate', msg =>{
 					}
 				break;
 				case 'boot':
-				case 'kick': // TODO: Get up to speed w/ nicknames
+				case 'kick':
 					if (isAuthorized(userID)) {
 						if (args[1]) {
-							console.log(args); // "SEARCH FOR USER" functions will need updated
-							var userToRemove = userList.find(u => u.username.toLowerCase() == args[1].toLowerCase()); //find user's properly capitalized name
-							if (userToRemove && userToRemove.username && removeUserByName(args[1])) { 
-								msg.channel.send("Okay "+username+", I've removed "+userToRemove.username+" from the game.");
+							console.log(args);
+							let userToRemove;
+							//find correct user by username or nickname
+							if (!(userToRemove = userList.find(u => u.username.toLowerCase() == args[1].toLowerCase())))
+								userToRemove = userList.find(u => u.nickname.toLowerCase()==args[1].toLowerCase());
+							
+							if (userToRemove && userToRemove.username && removeUserByName(userToRemove.username)) { // if argument matches a user, remove them
+								msg.channel.send("Okay "+nickname+", I've removed "+userToRemove.nickname+" from the game.");
 							} else {
 								msg.channel.send(config.notAPlayerWarn );
 							}
+							
+							
 						} else {
 							msg.channel.send(config.missingArgWarn+"\n"+config.kickUsageMsg);
 						}
@@ -461,16 +466,18 @@ client.on('messageCreate', msg =>{
 						msg.channel.send(config.unauthorizedMsg);
 					}
 				break;
-				case 'addmin': // TODO: nickname updates
+				case 'addmin':
 					if (isAuthorized(userID)) {
 						if (args[1]) {
-							var userToAddList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
+							var userToAddList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase());
+							if (userToAddList.length == 0)
+								userToAddList = userList.filter(u => u.nickname.toLowerCase() == args[1].toLowerCase());
 							if (userToAddList.length > 1) {
 								msg.channel.send("WUT? Userlist is in bad state");
 							} else if (userToAddList.length == 1) {
 								if(!isAuthorized(userToAddList[0].userID)) {
 									authorizedUsers.push(userToAddList[0].userID);
-									msg.channel.send(username + " added <@" + userToAddList[0].userID + "> to the admin list.");
+									msg.channel.send(nickname + " added <@" + userToAddList[0].userID + "> to the admin list.");
 								} else {
 									msg.channel.send(config.alreadyAdminWarn);
 								}
@@ -484,18 +491,20 @@ client.on('messageCreate', msg =>{
 						msg.channel.send(config.unauthorizedMsg);
 					}
 				break;
-				case 'removeadmin': //TODO: nickname update
+				case 'removeadmin':
 					if (isAuthorized(userID)) {
 						if (args[1]) {
 							var userToRemoveList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
+							if (userToAddList.length == 0)
+								userToAddList = userList.filter(u => u.nickname.toLowerCase() == args[1].toLowerCase());
 							if (userToRemoveList.length > 1) {
 								msg.channel.send("WUT? Userlist is in bad state");
 							} else if (userToRemoveList.length == 1 && isAuthorized(userToRemoveList[0].userID)) {
 								if (isPermAdmin(userToRemoveList[0].userID)) {
-									msg.channel.send("Nice try, but "+userToRemoveList[0].username+" is a permanent admin.");
+									msg.channel.send("Nice try, but "+userToRemoveList[0].nickname+" is a permanent admin.");
 								} else  {
 									authorizedUsers = authorizedUsers.filter(a => a != userToRemoveList[0].userID);
-									msg.channel.send(username + " removed <@" + userToRemoveList[0].userID + "> from the admin list.");
+									msg.channel.send(nickname + " removed <@" + userToRemoveList[0].userID + "> from the admin list.");
 								}
 							} else {
 								msg.channel.send("Whoops, looks like "+ args[1] +" isn't an admin or isn't playing." );
