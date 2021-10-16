@@ -25,7 +25,8 @@ var tileSet = require('./tiles.json');
 var emptyUser = { username: "empty", userID: "empty", nickname: "empty"};
 
 
-var globalChannelId =""; var globalChannel = {}
+//var globalChannelID ="";
+var globalChannel = {}; var globalGuild = { };
 // Configure logger settings
 logger.remove(logger.transports.Console);
 logger.add(new logger.transports.Console(), {
@@ -39,8 +40,7 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_M
 //Boot up bot
 client.on('ready',() => {
     logger.info('Connected');
-    logger.info('Logged in as: ');
-    logger.info(client.user.tag);
+    logger.info('Logged in as: ' + client.user.tag);
 
 	if(config.commandPrefix != "!"){ //replace command names in config file if non-default prefix is set.
 		for(const key in config){
@@ -50,14 +50,19 @@ client.on('ready',() => {
 		}
 	}
 	if(config.channelID){ //only send message if default channel is set in config
-		globalChannelId = config.channelID;
-		client.channels.fetch(globalChannelId)
+		client.channels.fetch(config.channelID)
 			.then(channel => {
 				globalChannel = channel;
+				globalGuild = channel.guild;
+				logChannelInfo();
 				channel.send(config.readyMsg)
 			})
 	}
 });
+
+function logChannelInfo() {
+	logger.info('Now using channel: ' + globalChannel.name + ', in Guild: ' + globalGuild.name + ' which is ' + (globalGuild.available ? 'ONLINE' : 'OFFLINE') + ' with ' + globalGuild.memberCount + ' members');
+}
 
 // tile is acceptable if count isn't depleted and tile WAITSR constraint satisfied
 function isValid(tile) {
@@ -148,7 +153,7 @@ function removeUserByName(username) {
 	console.log("Attempt to remove user by username " + username + ". Did it work?: "+ success );
 	return success;
 }
-function removeUserByNickname(nickname) {
+function removeUserByNickname(nickname) { // this function isn't currently used, might not be necessary
 	var l = userList.length;
 	userList = userList.filter(u => u.nickname.toLowerCase() != nickname.toLowerCase());
 	let success = l > userList.length
@@ -163,6 +168,18 @@ function compareUsers(arr, userID) { //todo: fix this so Abe is happy
 		if (userID == arr[i].userID) return true;
 	}
 	return false;
+}
+
+async function updateUserNicknames() {
+	// get list of userIDs
+	let fetchOptions = { user: userList.map(u => u.userID) };
+	// fetch nicknames for each
+	let ingameGuildMembers = await globalGuild.members.fetch(fetchOptions);
+	
+	ingameGuildMembers.forEach((member,id) => {
+		let userIdx = userList.findIndex(u => u.userID == id);
+		if (userIdx > -1) userList[userIdx].nickname = member.nickname;
+	})
 }
 
 //Returns the next user object. Super important, be careful when messing with this
@@ -236,19 +253,23 @@ client.on('messageCreate', msg =>{
 	var username = msg.author.username;
 	var userID = msg.author.id;
 	var nickname = msg.member.nickname;
-	var channelID = msg.channelId;
 	var message = msg.content;
 
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!` or commandPrefix set in config.json
-	if ((gameOver || channelID == globalChannelId) && userID != client.user.id) { //ensure not to respond to own messages
+	if ((gameOver || msg.channelId == globalChannel.id) && userID != client.user.id) { //ensure not to respond to own messages
 		if (message.substring(0, config.commandPrefix.length) == config.commandPrefix) {
 			message = message.toLowerCase();
 			var args = message.substring(config.commandPrefix.length).split(' ');
 			if (args.length > 1) {
 				args[1] = args.slice(1).join(' ');
 			}
-			globalChannelId = channelID; globalChannel = msg.channel
+			if (msg.channelId != globalChannel.id) {
+				globalChannel = msg.channel; 
+				globalGuild = msg.guild;
+				logChannelInfo();
+			}
+			updateUserNicknames();
 			switch(args[0]) {
 				// commands for all users
 				case 'rw':
@@ -259,7 +280,6 @@ client.on('messageCreate', msg =>{
 						if (userList.length > 0) {
 							gameName = rw({exactly:2, join: '', formatter: (word, index)=> {return index === 0 ? word.slice(0,1).toUpperCase().concat(word.slice(1)) : word;}});
 							console.log("Game Name: " + gameName);
-							globalChannelId = channelID; globalChannel = msg.channel;
 							initializeGame();
 							shuffleStack();
 							msg.channel.send("Welcome! Your game name is " + gameName + " and we " + (WAITSR ? "ARE" : "are NOT" ) + " in the same room." +"\n\n<@"+nextUser().userID + "> goes first! Get things started with !draw");
@@ -403,7 +423,15 @@ client.on('messageCreate', msg =>{
 						msg.channel.send(config.rollUsageMsg);
 					}
 				break;
-		
+				case 'graveyard':
+					var graveyardString = graveyard.join(", ");
+					if (graveyardString.length > 0){
+						msg.channel.send(graveyardString);
+					} else {
+						msg.channel.send(config.graveyardEmptyWarn);
+					}
+				break;
+				
 				// admin commands
 				case 'skip':
 					if (isAuthorized(userID)) {
@@ -576,14 +604,6 @@ client.on('messageCreate', msg =>{
 						}
 					} else {
 						msg.channel.send(config.unauthorizedMsg);
-					}
-				break;
-				case 'graveyard':
-					var graveyardString = graveyard.join(", ");
-					if (graveyardString.length > 0){
-						msg.channel.send(graveyardString);
-					} else {
-						msg.channel.send(config.graveyardEmptyWarn);
 					}
 				break;
 				case 'save':
