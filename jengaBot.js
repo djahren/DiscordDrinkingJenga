@@ -22,7 +22,7 @@ try{
 var config = require('./config.json');
 // var tileSet = require('./test_tiles.json');
 var tileSet = require('./tiles.json');
-var emptyUser = { username: "empty", userID: "empty"};
+var emptyUser = { username: "empty", userID: "empty", nickname: "empty"};
 
 
 var globalChannelId =""; var globalChannel = {}
@@ -138,14 +138,23 @@ function getTileByFuzzyName(query) {
 function removeUserByID(userID) {
 	var l = userList.length;
 	userList = userList.filter(u => u.userID != userID);
-	console.log("Attempt to remove user by ID " + userID + ". Did it work?: "+ (l > userList.length) );
-	return l > userList.length;
+	let success = l > userList.length
+	console.log("Attempt to remove user by ID " + userID + ". Did it work?: "+ success );
+	return success;
 }
 function removeUserByName(username) {
 	var l = userList.length;
 	userList = userList.filter(u => u.username.toLowerCase() != username.toLowerCase()); 
-	console.log("Attempt to remove user by username " + username + ". Did it work?: "+ (l > userList.length) );
-	return l > userList.length;
+	let success = l > userList.length
+	console.log("Attempt to remove user by username " + username + ". Did it work?: "+ success );
+	return success;
+}
+function removeUserByNickname(nickname) {
+	var l = userList.length;
+	userList = userList.filter(u => u.nickname.toLowerCase() != nickname.toLowerCase());
+	let success = l > userList.length
+	console.log("Attempt to remove user by nickname " + nickname + ". Did it work?: "+ success );
+	return success;
 }
 
 //Checks to see if a user is in a list of user objects
@@ -227,6 +236,7 @@ function sortTiles(inputTiles){
 client.on('messageCreate', msg =>{
 	var username = msg.author.username;
 	var userID = msg.author.id;
+	var nickname = msg.member.nickname;
 	var channelID = msg.channelId;
 	var message = msg.content;
 
@@ -275,8 +285,8 @@ client.on('messageCreate', msg =>{
 						
 						prevTile = currentStack.pop();
 						graveyard.unshift(prevTile.name); //TODO: maybe replace prevtile with graveyard[0]? would have to catch nullcase. could do function?
-						prevUser = {"username":username,"userID":userID};
-						msg.channel.send(username + " drew\n**"+prevTile.name+"**:\n\t*"+ prevTile.text+"*");
+						prevUser = {"username":username,"userID":userID,"nickname":nickname};
+						msg.channel.send(nickname + " drew\n**"+prevTile.name+"**:\n\t*"+ prevTile.text+"*");
 						console.log(prevTile.name+": "+ prevTile.text); 
 						usersGone.push(prevUser);
 						save();
@@ -293,10 +303,10 @@ client.on('messageCreate', msg =>{
 				break;
 				case 'join':
 					if(!compareUsers(userList,userID)) {
-						userList.push({"username":username,"userID":userID});
-						msg.channel.send("Welcome to the game, "+username+"!");
+						userList.push({"username":username,"userID":userID,"nickname":nickname});
+						msg.channel.send("Welcome to the game, "+nickname+"!");
 					} else {
-						msg.channel.send(username+": "+config.alreadyJoinedWarn);
+						msg.channel.send(nickname+": "+config.alreadyJoinedWarn);
 					}
 				break;
 				case 'turn':
@@ -308,14 +318,14 @@ client.on('messageCreate', msg =>{
 				break;
 				case 'order': 
 					if (userList.length > 0) {
-						msg.channel.send("Here's the turn order: "+userList.map(u => u.username).join(', ') );
+						msg.channel.send("Here's the turn order: "+userList.map(u => u.nickname).join(', ') );
 					} else {
 						msg.channel.send(config.noUsersWarn );
 					}
 				break;
 				case 'leave':
 					if (removeUserByID(userID)) {
-						msg.channel.send("Okay "+username+", I've removed you from the game.");
+						msg.channel.send("Okay "+nickname+", I've removed you from the game.");
 					} else {
 						msg.channel.send(config.notAPlayerWarn);
 					}
@@ -333,7 +343,7 @@ client.on('messageCreate', msg =>{
 				case 'admins':
 					var admins = userList.filter(u => isAuthorized(u.userID));
 					if (admins.length > 0) {
-						msg.channel.send("Current in-game admins: "+admins.map(a => a.username).join(', ') );
+						msg.channel.send("Current in-game admins: "+admins.map(a => a.nickname).join(', ') );
 					} else {
 						msg.channel.send(config.noAdminsWarn);
 					}
@@ -386,7 +396,7 @@ client.on('messageCreate', msg =>{
 					if (args[1]) {
 						args[1] = parseInt(args[1]);
 						if (args[1] > 0) {
-							msg.channel.send("Result of "+username+"'s d"+args[1]+" roll: "+rollDice(args[1]));
+							msg.channel.send("Result of "+nickname+"'s d"+args[1]+" roll: "+rollDice(args[1]));
 						} else { 
 							msg.channel.send(config.rollUsageMsg);
 						}
@@ -422,7 +432,7 @@ client.on('messageCreate', msg =>{
 						
 						var adminTile = currentStack.pop();
 						graveyard.unshift(adminTile.name);
-						msg.channel.send("Admin "+username+" drew\n**"+adminTile.name+"**: \n\t*"+ adminTile.text +"*");
+						msg.channel.send("Admin "+nickname+" drew\n**"+adminTile.name+"**: \n\t*"+ adminTile.text +"*");
 						console.log("Admin draw: "+username+" drew "+adminTile.name+": "+ adminTile.text);
 						
 						if (currentStack.length == 0 ){
@@ -434,10 +444,10 @@ client.on('messageCreate', msg =>{
 					}
 				break;
 				case 'boot':
-				case 'kick':
+				case 'kick': // TODO: Get up to speed w/ nicknames
 					if (isAuthorized(userID)) {
 						if (args[1]) {
-							console.log(args);
+							console.log(args); // "SEARCH FOR USER" functions will need updated
 							var userToRemove = userList.find(u => u.username.toLowerCase() == args[1].toLowerCase()); //find user's properly capitalized name
 							if (userToRemove && userToRemove.username && removeUserByName(args[1])) { 
 								msg.channel.send("Okay "+username+", I've removed "+userToRemove.username+" from the game.");
@@ -451,7 +461,7 @@ client.on('messageCreate', msg =>{
 						msg.channel.send(config.unauthorizedMsg);
 					}
 				break;
-				case 'addmin':
+				case 'addmin': // TODO: nickname updates
 					if (isAuthorized(userID)) {
 						if (args[1]) {
 							var userToAddList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
@@ -474,7 +484,7 @@ client.on('messageCreate', msg =>{
 						msg.channel.send(config.unauthorizedMsg);
 					}
 				break;
-				case 'removeadmin':
+				case 'removeadmin': //TODO: nickname update
 					if (isAuthorized(userID)) {
 						if (args[1]) {
 							var userToRemoveList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
