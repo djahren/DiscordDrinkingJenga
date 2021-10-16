@@ -25,7 +25,6 @@ var tileSet = require('./tiles.json');
 var emptyUser = { username: "empty", userID: "empty", nickname: "empty"};
 
 
-//var globalChannelID ="";
 var globalChannel = {}; var globalGuild = { };
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -171,11 +170,10 @@ function compareUsers(arr, userID) { //todo: fix this so Abe is happy
 }
 
 async function updateUserNicknames() {
-	// get list of userIDs
+	// get list of ingame userIDs, and fetch their member objects
 	let fetchOptions = { user: userList.map(u => u.userID) };
-	// fetch nicknames for each
 	let ingameGuildMembers = await globalGuild.members.fetch(fetchOptions);
-	
+	// for every user, update their nickname attribute
 	ingameGuildMembers.forEach((member,id) => {
 		let userIdx = userList.findIndex(u => u.userID == id);
 		if (userIdx > -1) userList[userIdx].nickname = member.nickname;
