@@ -24,8 +24,8 @@ async function prompt(question){ //modifed from https://stackoverflow.com/a/4670
 async function confirmYesNo(question){
     var selection = ""; 
     while(selection != "y" && selection != "n"){
-        selection = await prompt(question + ' [Y/N]: '); selection = selection.toLowerCase()
-        switch (selection) {
+        selection = await prompt(question + ' [Y/N]: '); 
+        switch (selection.toLowerCase()) {
             case "y":
                 return true;
             case "n":
