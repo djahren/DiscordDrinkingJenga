@@ -1,13 +1,19 @@
 /* jshint esversion: 6 */
 /* jshint node: true */
+var nodeMajorVersion = Number.parseInt(process.version.split(".")[0].replace('v','')); 
+var nodeMinorVersion = Number.parseInt(process.version.split(".")[1]); 
+if((nodeMajorVersion >= 16 && nodeMinorVersion < 6) || nodeMajorVersion < 16){
+	console.log(`Please make sure Node (version 16.6.0 or greater) is installed. ${process.version} is currently installed.`);
+	process.exit()
+}
 try{
 	var { Client, Intents } = require('discord.js');
-	var logger = require('winston');
+	var logger = require('winston'); 
 	var fuzz = require('fuzzball');
 	var fs = require('fs');
 	var rw = require('random-words');
 } catch{
-    console.log("Please make sure Node (version 16.6.0 or greater) is installed and run 'npm install' first. To see your version of Node, run 'node -v'.");
+    console.log("Please run 'npm install' first.");
     process.exit()
 }
 try{
