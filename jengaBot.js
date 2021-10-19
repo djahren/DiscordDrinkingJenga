@@ -22,10 +22,10 @@ try{
 var config = require('./config.json');
 // var tileSet = require('./test_tiles.json');
 var tileSet = require('./tiles.json');
-var emptyUser = { username: "empty", userID: "empty"};
+var emptyUser = { username: "empty", userID: "empty", nickname: "empty"};
 
 
-var globalChannelId =""; var globalChannel = {}
+var globalChannel = {}; var globalGuild = { };
 // Configure logger settings
 logger.remove(logger.transports.Console);
 logger.add(new logger.transports.Console(), {
@@ -39,8 +39,7 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_M
 //Boot up bot
 client.on('ready',() => {
     logger.info('Connected');
-    logger.info('Logged in as: ');
-    logger.info(client.user.tag);
+    logger.info('Logged in as: ' + client.user.tag);
 
 	if(config.commandPrefix != "!"){ //replace command names in config file if non-default prefix is set.
 		for(const key in config){
@@ -50,14 +49,19 @@ client.on('ready',() => {
 		}
 	}
 	if(config.channelID){ //only send message if default channel is set in config
-		globalChannelId = config.channelID;
-		client.channels.fetch(globalChannelId)
+		client.channels.fetch(config.channelID)
 			.then(channel => {
 				globalChannel = channel;
+				globalGuild = channel.guild;
+				logChannelInfo();
 				channel.send(config.readyMsg)
 			})
 	}
 });
+
+function logChannelInfo() {
+	logger.info('Now using channel: ' + globalChannel.name + ', in Guild: ' + globalGuild.name + ' which is ' + (globalGuild.available ? 'ONLINE' : 'OFFLINE') + ' with ' + globalGuild.memberCount + ' members');
+}
 
 // tile is acceptable if count isn't depleted and tile WAITSR constraint satisfied
 function isValid(tile) {
@@ -94,10 +98,10 @@ function initializeGame() {
 	var cloneState = JSON.parse(JSON.stringify(tileSet));
 	Object.keys(cloneState).forEach(title =>{
 		var tilename = title;
-		tileNames.push(tilename); // move to the isValid loop for WAITSR compatibility, need to account for count in this (if count ==1 ?)
 		var tile = cloneState[title];
 		while(isValid(tile)) { // only adds tiles with proper count and WAITSR state
 			currentStack.push( { "name":tilename, "text":tile.text } );
+			if (tile.count == 1) tileNames.push(tilename);
 			tile.count--;
 		}
 	});
@@ -122,8 +126,7 @@ function shuffleStack() { // shuffle current stack with fisher-yates
 	}
 }
 
-// two problems: multiple identical tiles are being returned (might be related to tiles with count>1? though it happened with compliments so maybe not
-// also, doesn't take into account current WAITSR state. look into this.
+
 function getTileByFuzzyName(query) {
 	console.log("Searching for tile with query: "+query);
 	var results = fuzz.extract(query,tileNames);
@@ -138,14 +141,23 @@ function getTileByFuzzyName(query) {
 function removeUserByID(userID) {
 	var l = userList.length;
 	userList = userList.filter(u => u.userID != userID);
-	console.log("Attempt to remove user by ID " + userID + ". Did it work?: "+ (l > userList.length) );
-	return l > userList.length;
+	let success = l > userList.length
+	console.log("Attempt to remove user by ID " + userID + ". Did it work?: "+ success );
+	return success;
 }
 function removeUserByName(username) {
 	var l = userList.length;
 	userList = userList.filter(u => u.username.toLowerCase() != username.toLowerCase()); 
-	console.log("Attempt to remove user by username " + username + ". Did it work?: "+ (l > userList.length) );
-	return l > userList.length;
+	let success = l > userList.length
+	console.log("Attempt to remove user by username " + username + ". Did it work?: "+ success );
+	return success;
+}
+function removeUserByNickname(nickname) { // this function isn't currently used, might not be necessary
+	var l = userList.length;
+	userList = userList.filter(u => u.nickname.toLowerCase() != nickname.toLowerCase());
+	let success = l > userList.length
+	console.log("Attempt to remove user by nickname " + nickname + ". Did it work?: "+ success );
+	return success;
 }
 
 //Checks to see if a user is in a list of user objects
@@ -155,6 +167,17 @@ function compareUsers(arr, userID) { //todo: fix this so Abe is happy
 		if (userID == arr[i].userID) return true;
 	}
 	return false;
+}
+
+async function updateUserNicknames() {
+	// get list of ingame userIDs, and fetch their member objects
+	let fetchOptions = { user: userList.map(u => u.userID) };
+	let ingameGuildMembers = await globalGuild.members.fetch(fetchOptions);
+	// for every user, update their nickname attribute
+	ingameGuildMembers.forEach((member,id) => {
+		let userIdx = userList.findIndex(u => u.userID == id);
+		if (userIdx > -1) userList[userIdx].nickname = member.nickname;
+	})
 }
 
 //Returns the next user object. Super important, be careful when messing with this
@@ -227,19 +250,24 @@ function sortTiles(inputTiles){
 client.on('messageCreate', msg =>{
 	var username = msg.author.username;
 	var userID = msg.author.id;
-	var channelID = msg.channelId;
+	var nickname = msg.member.nickname;
 	var message = msg.content;
 
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!` or commandPrefix set in config.json
-	if ((gameOver || channelID == globalChannelId) && userID != client.user.id) { //ensure not to respond to own messages
+	if ((gameOver || msg.channelId == globalChannel.id) && userID != client.user.id) { //ensure not to respond to own messages
 		if (message.substring(0, config.commandPrefix.length) == config.commandPrefix) {
 			message = message.toLowerCase();
 			var args = message.substring(config.commandPrefix.length).split(' ');
 			if (args.length > 1) {
 				args[1] = args.slice(1).join(' ');
 			}
-			globalChannelId = channelID; globalChannel = msg.channel
+			if (msg.channelId != globalChannel.id) {
+				globalChannel = msg.channel; 
+				globalGuild = msg.guild;
+				logChannelInfo();
+			}
+			updateUserNicknames();
 			switch(args[0]) {
 				// commands for all users
 				case 'rw':
@@ -250,7 +278,6 @@ client.on('messageCreate', msg =>{
 						if (userList.length > 0) {
 							gameName = rw({exactly:2, join: '', formatter: (word, index)=> {return index === 0 ? word.slice(0,1).toUpperCase().concat(word.slice(1)) : word;}});
 							console.log("Game Name: " + gameName);
-							globalChannelId = channelID; globalChannel = msg.channel;
 							initializeGame();
 							shuffleStack();
 							msg.channel.send("Welcome! Your game name is " + gameName + " and we " + (WAITSR ? "ARE" : "are NOT" ) + " in the same room." +"\n\n<@"+nextUser().userID + "> goes first! Get things started with !draw");
@@ -275,8 +302,8 @@ client.on('messageCreate', msg =>{
 						
 						prevTile = currentStack.pop();
 						graveyard.unshift(prevTile.name); //TODO: maybe replace prevtile with graveyard[0]? would have to catch nullcase. could do function?
-						prevUser = {"username":username,"userID":userID};
-						msg.channel.send(username + " drew\n**"+prevTile.name+"**:\n\t*"+ prevTile.text+"*");
+						prevUser = {"username":username,"userID":userID,"nickname":nickname};
+						msg.channel.send(nickname + " drew\n**"+prevTile.name+"**:\n\t*"+ prevTile.text+"*");
 						console.log(prevTile.name+": "+ prevTile.text); 
 						usersGone.push(prevUser);
 						save();
@@ -293,10 +320,10 @@ client.on('messageCreate', msg =>{
 				break;
 				case 'join':
 					if(!compareUsers(userList,userID)) {
-						userList.push({"username":username,"userID":userID});
-						msg.channel.send("Welcome to the game, "+username+"!");
+						userList.push({"username":username,"userID":userID,"nickname":nickname});
+						msg.channel.send("Welcome to the game, "+nickname+"!");
 					} else {
-						msg.channel.send(username+": "+config.alreadyJoinedWarn);
+						msg.channel.send(nickname+": "+config.alreadyJoinedWarn);
 					}
 				break;
 				case 'turn':
@@ -308,14 +335,14 @@ client.on('messageCreate', msg =>{
 				break;
 				case 'order': 
 					if (userList.length > 0) {
-						msg.channel.send("Here's the turn order: "+userList.map(u => u.username).join(', ') );
+						msg.channel.send("Here's the turn order: "+userList.map(u => u.nickname).join(', ') );
 					} else {
 						msg.channel.send(config.noUsersWarn );
 					}
 				break;
 				case 'leave':
 					if (removeUserByID(userID)) {
-						msg.channel.send("Okay "+username+", I've removed you from the game.");
+						msg.channel.send("Okay "+nickname+", I've removed you from the game.");
 					} else {
 						msg.channel.send(config.notAPlayerWarn);
 					}
@@ -333,7 +360,7 @@ client.on('messageCreate', msg =>{
 				case 'admins':
 					var admins = userList.filter(u => isAuthorized(u.userID));
 					if (admins.length > 0) {
-						msg.channel.send("Current in-game admins: "+admins.map(a => a.username).join(', ') );
+						msg.channel.send("Current in-game admins: "+admins.map(a => a.nickname).join(', ') );
 					} else {
 						msg.channel.send(config.noAdminsWarn);
 					}
@@ -386,7 +413,7 @@ client.on('messageCreate', msg =>{
 					if (args[1]) {
 						args[1] = parseInt(args[1]);
 						if (args[1] > 0) {
-							msg.channel.send("Result of "+username+"'s d"+args[1]+" roll: "+rollDice(args[1]));
+							msg.channel.send("Result of "+nickname+"'s d"+args[1]+" roll: "+rollDice(args[1]));
 						} else { 
 							msg.channel.send(config.rollUsageMsg);
 						}
@@ -394,7 +421,15 @@ client.on('messageCreate', msg =>{
 						msg.channel.send(config.rollUsageMsg);
 					}
 				break;
-		
+				case 'graveyard':
+					var graveyardString = graveyard.join(", ");
+					if (graveyardString.length > 0){
+						msg.channel.send(graveyardString);
+					} else {
+						msg.channel.send(config.graveyardEmptyWarn);
+					}
+				break;
+				
 				// admin commands
 				case 'skip':
 					if (isAuthorized(userID)) {
@@ -422,7 +457,7 @@ client.on('messageCreate', msg =>{
 						
 						var adminTile = currentStack.pop();
 						graveyard.unshift(adminTile.name);
-						msg.channel.send("Admin "+username+" drew\n**"+adminTile.name+"**: \n\t*"+ adminTile.text +"*");
+						msg.channel.send("Admin "+nickname+" drew\n**"+adminTile.name+"**: \n\t*"+ adminTile.text +"*");
 						console.log("Admin draw: "+username+" drew "+adminTile.name+": "+ adminTile.text);
 						
 						if (currentStack.length == 0 ){
@@ -438,12 +473,18 @@ client.on('messageCreate', msg =>{
 					if (isAuthorized(userID)) {
 						if (args[1]) {
 							console.log(args);
-							var userToRemove = userList.find(u => u.username.toLowerCase() == args[1].toLowerCase()); //find user's properly capitalized name
-							if (userToRemove && userToRemove.username && removeUserByName(args[1])) { 
-								msg.channel.send("Okay "+username+", I've removed "+userToRemove.username+" from the game.");
+							let userToRemove;
+							//find correct user by username or nickname
+							if (!(userToRemove = userList.find(u => u.username.toLowerCase() == args[1].toLowerCase())))
+								userToRemove = userList.find(u => u.nickname.toLowerCase()==args[1].toLowerCase());
+							
+							if (userToRemove && userToRemove.username && removeUserByName(userToRemove.username)) { // if argument matches a user, remove them
+								msg.channel.send("Okay "+nickname+", I've removed "+userToRemove.nickname+" from the game.");
 							} else {
 								msg.channel.send(config.notAPlayerWarn );
 							}
+							
+							
 						} else {
 							msg.channel.send(config.missingArgWarn+"\n"+config.kickUsageMsg);
 						}
@@ -454,13 +495,15 @@ client.on('messageCreate', msg =>{
 				case 'addmin':
 					if (isAuthorized(userID)) {
 						if (args[1]) {
-							var userToAddList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
+							var userToAddList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase());
+							if (userToAddList.length == 0)
+								userToAddList = userList.filter(u => u.nickname.toLowerCase() == args[1].toLowerCase());
 							if (userToAddList.length > 1) {
 								msg.channel.send("WUT? Userlist is in bad state");
 							} else if (userToAddList.length == 1) {
 								if(!isAuthorized(userToAddList[0].userID)) {
 									authorizedUsers.push(userToAddList[0].userID);
-									msg.channel.send(username + " added <@" + userToAddList[0].userID + "> to the admin list.");
+									msg.channel.send(nickname + " added <@" + userToAddList[0].userID + "> to the admin list.");
 								} else {
 									msg.channel.send(config.alreadyAdminWarn);
 								}
@@ -478,14 +521,16 @@ client.on('messageCreate', msg =>{
 					if (isAuthorized(userID)) {
 						if (args[1]) {
 							var userToRemoveList = userList.filter(u => u.username.toLowerCase() == args[1].toLowerCase() );
+							if (userToAddList.length == 0)
+								userToAddList = userList.filter(u => u.nickname.toLowerCase() == args[1].toLowerCase());
 							if (userToRemoveList.length > 1) {
 								msg.channel.send("WUT? Userlist is in bad state");
 							} else if (userToRemoveList.length == 1 && isAuthorized(userToRemoveList[0].userID)) {
 								if (isPermAdmin(userToRemoveList[0].userID)) {
-									msg.channel.send("Nice try, but "+userToRemoveList[0].username+" is a permanent admin.");
+									msg.channel.send("Nice try, but "+userToRemoveList[0].nickname+" is a permanent admin.");
 								} else  {
 									authorizedUsers = authorizedUsers.filter(a => a != userToRemoveList[0].userID);
-									msg.channel.send(username + " removed <@" + userToRemoveList[0].userID + "> from the admin list.");
+									msg.channel.send(nickname + " removed <@" + userToRemoveList[0].userID + "> from the admin list.");
 								}
 							} else {
 								msg.channel.send("Whoops, looks like "+ args[1] +" isn't an admin or isn't playing." );
@@ -557,14 +602,6 @@ client.on('messageCreate', msg =>{
 						}
 					} else {
 						msg.channel.send(config.unauthorizedMsg);
-					}
-				break;
-				case 'graveyard':
-					var graveyardString = graveyard.join(", ");
-					if (graveyardString.length > 0){
-						msg.channel.send(graveyardString);
-					} else {
-						msg.channel.send(config.graveyardEmptyWarn);
 					}
 				break;
 				case 'save':
