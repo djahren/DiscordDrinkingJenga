@@ -7,7 +7,7 @@ try{
 	var fs = require('fs');
 	var rw = require('random-words');
 } catch{
-    console.log("Please make sure Node is installed and run 'npm install' first.");
+    console.log("Please make sure Node (version 16.6.0 or greater) is installed and run 'npm install' first. To see your version of Node, run 'node -v'.");
     process.exit()
 }
 try{
